@@ -14,13 +14,22 @@ const defaultFilters: FeedFilters = {
 export const fetchMyFilters = async (): Promise<FeedFilters> => {
   const appId = await getMyAppId();
 
+  return fetchFiltersByAppId(appId);
+};
+
+export const fetchFiltersByAppId = async (
+  appId: string,
+): Promise<FeedFilters> => {
   const snapshot = await getDoc(doc(db, 'filters', appId));
 
   if (!snapshot.exists()) {
-    return defaultFilters;
+    return { ...defaultFilters };
   }
 
-  return snapshot.data() as FeedFilters;
+  return {
+    ...defaultFilters,
+    ...(snapshot.data() as Partial<FeedFilters>),
+  };
 };
 
 export const saveMyFilters = async (filters: FeedFilters): Promise<void> => {

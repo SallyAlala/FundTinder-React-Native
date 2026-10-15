@@ -17,6 +17,8 @@ import { buildChatId } from '@/utils/chat-id-builder';
 import { ListFilterPlus, MessageCircle } from 'lucide-react-native';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import Toast from 'react-native-toast-message';
+import { fetchSwipedAppIds, saveSwipe } from '@/services/matchService';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -40,7 +42,19 @@ export default function HomeScreen() {
         fetchAllUsers(),
         fetchMyFilters(),
       ]);
-      const filteredUsers = filterUsers(allUsers, filters, myAppId);
+      let swipedAppIds = new Set<string>();
+
+      try {
+        swipedAppIds = await fetchSwipedAppIds(appId);
+      } catch (error) {
+        console.error('Failed to load swipe history:', error);
+      }
+
+      const matchingUsers = filterUsers(allUsers, filters, appId);
+      const newUsers = matchingUsers.filter(
+        (user) => !swipedAppIds.has(user.uid),
+      );
+      const filteredUsers = newUsers.length > 0 ? newUsers : matchingUsers;
 
       setUsers(filteredUsers);
       setCurrentIndex(0);
@@ -57,7 +71,19 @@ export default function HomeScreen() {
     }, []),
   );
 
-  const handleSwipe = () => {
+  const handleSwipe = async (user: User, liked: boolean) => {
+    try {
+      await saveSwipe(myAppId, user.uid, liked);
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Could not save your swipe.',
+      });
+      return;
+    }
+
     setCurrentIndex((prev) => prev + 1);
   };
 
@@ -98,8 +124,8 @@ export default function HomeScreen() {
               <View style={styles.cardWrapper}>
                 <ProfileCard
                   {...currentUser}
-                  onSwipeLeft={handleSwipe}
-                  onSwipeRight={handleSwipe}
+                  onSwipeLeft={() => handleSwipe(currentUser, false)}
+                  onSwipeRight={() => handleSwipe(currentUser, true)}
                 />
               </View>
               {isDesktop ? (
