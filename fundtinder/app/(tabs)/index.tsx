@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -14,11 +14,20 @@ import { fetchMyFilters } from '@/services/filterService';
 import { router, useFocusEffect } from 'expo-router';
 import { Button } from '@/components/ui/button';
 import { buildChatId } from '@/utils/chat-id-builder';
-import { ListFilterPlus, MessageCircle } from 'lucide-react-native';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ListFilterPlus,
+  MessageCircle,
+} from 'lucide-react-native';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import Toast from 'react-native-toast-message';
-import { fetchSwipedAppIds, saveSwipe } from '@/services/matchService';
+import {
+  fetchMutualMatchAppIds,
+  fetchSwipedAppIds,
+  saveSwipe,
+} from '@/services/matchService';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -30,6 +39,7 @@ export default function HomeScreen() {
   const [users, setUsers] = useState<User[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [myAppId, setMyAppId] = useState('');
+  const [matchedUser, setMatchedUser] = useState<User | null>(null);
 
   const loadUsers = async () => {
     try {
@@ -38,9 +48,10 @@ export default function HomeScreen() {
       const appId = await getMyAppId();
       setMyAppId(appId);
 
-      const [allUsers, filters] = await Promise.all([
+      const [allUsers, filters, mutualMatchAppIds] = await Promise.all([
         fetchAllUsers(),
         fetchMyFilters(),
+        fetchMutualMatchAppIds(appId),
       ]);
       let swipedAppIds = new Set<string>();
 
@@ -50,13 +61,15 @@ export default function HomeScreen() {
         console.error('Failed to load swipe history:', error);
       }
 
-      const matchingUsers = filterUsers(allUsers, filters, appId);
+      const mutualMatchIds = new Set(mutualMatchAppIds);
+      const matchingUsers = filterUsers(allUsers, filters, appId).filter(
+        (user) => !mutualMatchIds.has(user.uid),
+      );
       const newUsers = matchingUsers.filter(
         (user) => !swipedAppIds.has(user.uid),
       );
-      const filteredUsers = newUsers.length > 0 ? newUsers : matchingUsers;
 
-      setUsers(filteredUsers);
+      setUsers(newUsers);
       setCurrentIndex(0);
     } catch (error) {
       console.error(error);
@@ -71,9 +84,14 @@ export default function HomeScreen() {
     }, []),
   );
 
-  const handleSwipe = async (user: User, liked: boolean) => {
+  const handleSwipe = async (user: User, wantToMatch: boolean) => {
+    setCurrentIndex((prev) => prev + 1);
+
     try {
-      await saveSwipe(myAppId, user.uid, liked);
+      const isMatch = await saveSwipe(myAppId, user.uid, wantToMatch);
+      if (isMatch) {
+        setMatchedUser(user);
+      }
     } catch (error) {
       console.error(error);
       Toast.show({
@@ -83,8 +101,6 @@ export default function HomeScreen() {
       });
       return;
     }
-
-    setCurrentIndex((prev) => prev + 1);
   };
 
   const currentUser = users[currentIndex];
@@ -115,19 +131,80 @@ export default function HomeScreen() {
         <View style={styles.loadingContainer}>
           <Loading />
         </View>
-      ) : users.length === 0 ? (
-        <ThemedText>No users match your current filters.</ThemedText>
+      ) : users.length === 0 || !currentUser ? (
+        <View style={styles.emptyFeedContainer}>
+          <ThemedText style={styles.emptyFeedMessage}>
+            You&apos;re all caught up! Stay tuned - new people will be joining
+            soon.
+          </ThemedText>
+        </View>
       ) : (
         currentUser && (
           <>
             <View style={styles.contentWrapper}>
-              <View style={styles.cardWrapper}>
-                <ProfileCard
-                  {...currentUser}
-                  onSwipeLeft={() => handleSwipe(currentUser, false)}
-                  onSwipeRight={() => handleSwipe(currentUser, true)}
-                />
+              <View style={styles.stackContainer}>
+                {users[currentIndex + 1] && (
+                  <>
+                    <View
+                      style={[
+                        styles.deckCard,
+                        styles.deckCardFirst,
+                        { borderColor: colors.base, pointerEvents: 'none' },
+                      ]}
+                    />
+                    {isDesktop && (
+                      <View
+                        style={[
+                          styles.deckCard,
+                          styles.deckCardSecond,
+                          { borderColor: colors.base, pointerEvents: 'none' },
+                        ]}
+                      />
+                    )}
+                  </>
+                )}
+                {users[currentIndex + 1] && (
+                  <View style={[styles.nextCard, { pointerEvents: 'none' }]}>
+                    <ProfileCard
+                      {...users[currentIndex + 1]}
+                      onSwipeLeft={() => undefined}
+                      onSwipeRight={() => undefined}
+                      cardStyle={styles.stackedCard}
+                    />
+                  </View>
+                )}
+                <View style={styles.cardWrapper}>
+                  <ProfileCard
+                    {...currentUser}
+                    onSwipeLeft={() => handleSwipe(currentUser, false)}
+                    onSwipeRight={() => handleSwipe(currentUser, true)}
+                  />
+                </View>
               </View>
+              {isDesktop && (
+                <View style={styles.desktopSwipeActions}>
+                  <Pressable
+                    accessibilityLabel="Swipe left"
+                    style={[
+                      styles.desktopActionButton,
+                      { borderColor: colors.base, borderWidth: 3 },
+                    ]}
+                    onPress={() => handleSwipe(currentUser, false)}
+                  >
+                    <ArrowLeft size={28} color={colors.base} />
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel="Swipe right"
+                    style={[
+                      styles.desktopActionButton,
+                      { borderColor: colors.base, borderWidth: 3 },
+                    ]}
+                    onPress={() => handleSwipe(currentUser, true)}
+                  >
+                    <ArrowRight size={28} color={colors.base} />
+                  </Pressable>
+                </View>
+              )}
               {isDesktop ? (
                 <View style={styles.desktopActions}>
                   <Pressable
@@ -180,6 +257,34 @@ export default function HomeScreen() {
           </>
         )
       )}
+      <Modal
+        visible={matchedUser !== null}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setMatchedUser(null)}
+      >
+        <View style={styles.matchOverlay}>
+          <View style={[styles.matchCard, { backgroundColor: colors.background }]}>
+            <LottieView
+              source={require('@/assets/lottie/money-rain.json')}
+              autoPlay
+              loop
+              style={styles.matchAnimation}
+            />
+            <ThemedText type="title" style={styles.matchTitle}>
+              It&apos;s a match!
+            </ThemedText>
+            <ThemedText style={styles.matchMessage}>
+              {matchedUser?.name} wants to match with you!
+            </ThemedText>
+            <Button
+              title="Continue browsing"
+              onPress={() => setMatchedUser(null)}
+              style={styles.matchButton}
+            />
+          </View>
+        </View>
+      </Modal>
     </ParallaxScrollView>
   );
 }
@@ -223,6 +328,18 @@ const styles = StyleSheet.create({
     minHeight: 400,
   },
 
+  emptyFeedContainer: {
+    minHeight: 400,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+
+  emptyFeedMessage: {
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+
   desktopActions: {
     position: 'absolute',
     right: -90,
@@ -236,7 +353,50 @@ const styles = StyleSheet.create({
   },
 
   cardWrapper: {
-    paddingBottom: 24,
+    zIndex: 2,
+  },
+
+  stackContainer: {
+    position: 'relative',
+    marginBottom: 24,
+  },
+
+  deckCard: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    borderWidth: 1,
+    borderRadius: 20,
+    zIndex: 0,
+  },
+
+  deckCardFirst: {
+    top: 12,
+    left: 12,
+  },
+
+  deckCardSecond: {
+    top: 24,
+    left: 24,
+  },
+
+  nextCard: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1,
+  },
+
+  stackedCard: {
+    height: '100%',
+  },
+
+  nextCardOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.9,
+    borderRadius: 20,
   },
 
   desktopActionButton: {
@@ -245,5 +405,47 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  desktopSwipeActions: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 16,
+    paddingTop: 16,
+  },
+
+  matchOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+
+  matchCard: {
+    width: '100%',
+    maxWidth: 420,
+    alignItems: 'center',
+    borderRadius: 24,
+    padding: 24,
+    gap: 12,
+  },
+
+  matchAnimation: {
+    width: 220,
+    height: 180,
+  },
+
+  matchTitle: {
+    textAlign: 'center',
+  },
+
+  matchMessage: {
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+
+  matchButton: {
+    width: '100%',
   },
 });

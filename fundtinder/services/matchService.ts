@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
@@ -14,7 +15,8 @@ import { User } from '@/types/user';
 type Swipe = {
   fromAppId: string;
   toAppId: string;
-  liked: boolean;
+  wantToMatch?: boolean;
+  liked?: boolean;
 };
 
 export type AiMatchRanking = {
@@ -30,14 +32,32 @@ const getSwipeId = (fromAppId: string, toAppId: string) =>
 export const saveSwipe = async (
   fromAppId: string,
   toAppId: string,
-  liked: boolean,
-) => {
+  wantToMatch: boolean,
+): Promise<boolean> => {
   await setDoc(doc(db, 'swipes', getSwipeId(fromAppId, toAppId)), {
     fromAppId,
     toAppId,
-    liked,
+    liked: wantToMatch,
     updatedAt: Date.now(),
   });
+
+  if (!wantToMatch) {
+    return false;
+  }
+
+  const reverseSwipe = await getDoc(
+    doc(db, 'swipes', getSwipeId(toAppId, fromAppId)),
+  );
+
+  const reverseSwipeData = reverseSwipe.data() as Swipe | undefined;
+
+  return Boolean(
+    reverseSwipeData?.wantToMatch ?? reverseSwipeData?.liked,
+  );
+};
+
+export const unmatch = async (appId: string, otherAppId: string) => {
+  await saveSwipe(appId, otherAppId, false);
 };
 
 export const fetchSwipedAppIds = async (fromAppId: string) => {
@@ -65,14 +85,14 @@ export const fetchMutualMatchAppIds = async (appId: string) => {
   const likedByMe = new Set(
     outgoingSnapshot.docs
       .map((swipe) => swipe.data() as Swipe)
-      .filter((swipe) => swipe.liked)
+      .filter((swipe) => swipe.wantToMatch ?? swipe.liked)
       .map((swipe) => swipe.toAppId)
       .filter(Boolean),
   );
 
   return incomingSnapshot.docs
     .map((swipe) => swipe.data() as Swipe)
-    .filter((swipe) => swipe.liked)
+    .filter((swipe) => swipe.wantToMatch ?? swipe.liked)
     .map((swipe) => swipe.fromAppId)
     .filter((candidateAppId) => likedByMe.has(candidateAppId));
 };

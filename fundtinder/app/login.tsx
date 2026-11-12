@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { TextField } from '@/components/ui/text-field';
 import { useState } from 'react';
 import { ThemedText } from '@/components/themed-text';
@@ -267,13 +267,20 @@ const styles = StyleSheet.create({
   loginCard: {
     padding: 32,
     borderRadius: 24,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.12,
-    shadowRadius: 20,
+    ...Platform.select({
+      web: {
+        boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.12)',
+      },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 8,
+        },
+        shadowOpacity: 0.12,
+        shadowRadius: 20,
+      },
+    }),
     elevation: 8,
   },
 

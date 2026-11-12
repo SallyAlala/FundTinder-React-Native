@@ -4,10 +4,18 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
+  Easing,
 } from 'react-native-reanimated';
 
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { Image, StyleSheet, View } from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
@@ -25,6 +33,7 @@ type Props = {
 
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
+  cardStyle?: StyleProp<ViewStyle>;
 };
 
 export function ProfileCard({
@@ -36,6 +45,7 @@ export function ProfileCard({
   profilePictureUrl,
   onSwipeLeft,
   onSwipeRight,
+  cardStyle,
 }: Props) {
   const isDesktop = useIsDesktop();
   const colorScheme = useColorScheme();
@@ -54,19 +64,27 @@ export function ProfileCard({
     })
     .onEnd(() => {
       if (translateX.value > 120) {
-        translateX.value = withTiming(500, {}, () => {
+        translateX.value = withTiming(
+          500,
+          { duration: 350, easing: Easing.out(Easing.cubic) },
+          () => {
           runOnJS(onSwipeRight)();
 
           translateX.value = 0;
           rotate.value = 0;
-        });
+          },
+        );
       } else if (translateX.value < -120) {
-        translateX.value = withTiming(-500, {}, () => {
+        translateX.value = withTiming(
+          -500,
+          { duration: 350, easing: Easing.out(Easing.cubic) },
+          () => {
           runOnJS(onSwipeLeft)();
 
           translateX.value = 0;
           rotate.value = 0;
-        });
+          },
+        );
       } else {
         translateX.value = withSpring(0);
         rotate.value = withSpring(0);
@@ -87,6 +105,7 @@ export function ProfileCard({
       <Animated.View
         style={[
           styles.card,
+          cardStyle,
           {
             backgroundColor: colors.background,
             borderColor: colors.base,
@@ -162,9 +181,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
+    ...Platform.select({
+      web: {
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
+      },
+      default: {
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+      },
+    }),
     elevation: 5,
   },
 

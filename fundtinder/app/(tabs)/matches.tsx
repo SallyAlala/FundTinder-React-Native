@@ -31,6 +31,7 @@ import {
   AiMatchRanking,
   fetchMutualMatchAppIds,
   rankMatchesWithLili,
+  unmatch,
 } from '@/services/matchService';
 
 type RankedMatch = User & AiMatchRanking;
@@ -75,6 +76,12 @@ export default function MatchesTabScreen() {
       const candidates = allUsers.filter(
         (user) => user.uid !== myAppId && mutualMatchAppIds.has(user.uid),
       );
+
+      if (candidates.length === 0) {
+        setMatches([]);
+        return;
+      }
+
       const candidatesWithPreferences = await Promise.all(
         candidates.map(async (candidate) => {
           const candidateFilters: FeedFilters = await fetchFiltersByAppId(
@@ -180,6 +187,24 @@ export default function MatchesTabScreen() {
             score={match.score}
             sharedThemes={match.sharedThemes}
             explanation={match.explanation}
+            isDesktop={isDesktop}
+            onUnmatch={async () => {
+              try {
+                await unmatch(myAppId, match.uid);
+                setMatches((currentMatches) =>
+                  currentMatches.filter(
+                    (currentMatch) => currentMatch.uid !== match.uid,
+                  ),
+                );
+              } catch (error) {
+                console.error(error);
+                Toast.show({
+                  type: 'error',
+                  text1: 'Error',
+                  text2: 'Could not unmatch this person.',
+                });
+              }
+            }}
             onPress={async () => {
               if (!myAppId) return;
 

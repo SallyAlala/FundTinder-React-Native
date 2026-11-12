@@ -1,10 +1,17 @@
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  Easing,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Colors, Fonts } from '@/constants/theme';
 import LottieView from 'lottie-react-native';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { askLili } from '@/services/liliAIService';
@@ -28,6 +35,7 @@ export default function LiliAITabScreen() {
   ]);
 
   const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const [hoveredChip, setHoveredChip] = useState<string | null>(null);
   const suggestions = [
     'What is FundTinder?',
@@ -37,22 +45,33 @@ export default function LiliAITabScreen() {
   ];
 
   const handleSend = async (message: string) => {
+    const trimmedMessage = message.trim();
+
+    if (!trimmedMessage || isTyping) {
+      return;
+    }
+
     const userMessage = {
       role: 'user',
-      content: message,
+      content: trimmedMessage,
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    setIsTyping(true);
 
-    const answer = await askLili(message);
+    try {
+      const answer = await askLili(trimmedMessage);
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: 'assistant',
-        content: answer,
-      },
-    ]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: answer,
+        },
+      ]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -129,6 +148,18 @@ export default function LiliAITabScreen() {
             <ThemedText>{message.content}</ThemedText>
           </View>
         ))}
+        {isTyping && (
+          <View
+            style={[
+              styles.messageBubble,
+              styles.assistantBubble,
+              { backgroundColor: colors.tabBarBackgroundColor },
+            ]}
+            accessibilityLabel="Lili is typing"
+          >
+            <TypingIndicator color={colors.base} />
+          </View>
+        )}
       </ScrollView>
 
       <View style={styles.inputContainer}>
@@ -151,6 +182,71 @@ export default function LiliAITabScreen() {
         />
       </View>
     </ParallaxScrollView>
+  );
+}
+
+function TypingIndicator({ color }: { color: string }) {
+  const firstDot = useRef(new Animated.Value(0)).current;
+  const secondDot = useRef(new Animated.Value(0)).current;
+  const thirdDot = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const dots = [firstDot, secondDot, thirdDot];
+    const animations = dots.map((dot, index) =>
+      Animated.loop(
+        Animated.sequence([
+          Animated.delay(index * 140),
+          Animated.timing(dot, {
+            toValue: 1,
+            duration: 360,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+          Animated.timing(dot, {
+            toValue: 0,
+            duration: 360,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: true,
+          }),
+          Animated.delay((2 - index) * 140),
+        ]),
+      ),
+    );
+
+    animations.forEach((animation) => animation.start());
+
+    return () => {
+      animations.forEach((animation) => animation.stop());
+    };
+  }, [firstDot, secondDot, thirdDot]);
+
+  return (
+    <View style={styles.typingIndicator}>
+      <ThemedText style={styles.typingLabel}>Typing</ThemedText>
+      {[firstDot, secondDot, thirdDot].map((dot, index) => (
+        <Animated.View
+          key={index}
+          style={[
+            styles.typingDot,
+            {
+              backgroundColor: color,
+              opacity: dot.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.35, 1],
+              }),
+              transform: [
+                {
+                  translateY: dot.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, -4],
+                  }),
+                },
+              ],
+            },
+          ]}
+        />
+      ))}
+    </View>
   );
 }
 
@@ -217,6 +313,24 @@ const styles = StyleSheet.create({
 
   assistantBubble: {
     alignSelf: 'flex-start',
+  },
+
+  typingIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    minHeight: 20,
+  },
+
+  typingLabel: {
+    marginRight: 2,
+    opacity: 0.7,
+  },
+
+  typingDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
   },
 
   messagesScroll: {

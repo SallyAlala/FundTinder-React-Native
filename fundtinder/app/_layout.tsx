@@ -6,10 +6,12 @@ import {
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+import { Platform } from 'react-native';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 import { useFonts } from 'expo-font';
+import { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider } from '@/providers/auth-provider';
@@ -23,6 +25,12 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     Pacifico_400Regular,
   });
+
+  useEffect(() => {
+    if (Platform.OS === 'web' && typeof document !== 'undefined') {
+      document.title = 'FundTinder';
+    }
+  }, []);
 
   if (!loaded) return null;
 

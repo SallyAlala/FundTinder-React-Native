@@ -6,7 +6,7 @@ import {
 import { auth, db } from '@/config/firebase';
 import { setDoc } from '@firebase/firestore';
 import { doc, getDoc } from 'firebase/firestore';
-import { generateThemes } from '@/services/filterService';
+import { generateThemes } from '@/services/themeService';
 
 export const login = async (email: string, password: string) => {
   return signInWithEmailAndPassword(auth, email, password);
