@@ -1,3 +1,5 @@
+import { getAiAuthHeaders } from '@/services/aiAuth';
+
 export const generateThemes = async (
   description: string,
 ): Promise<string[]> => {
@@ -5,9 +7,7 @@ export const generateThemes = async (
     'https://us-central1-fundtinder.cloudfunctions.net/generateThemes',
     {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: await getAiAuthHeaders(),
       body: JSON.stringify({
         description,
       }),

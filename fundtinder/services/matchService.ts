@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '@/config/firebase';
+import { getAiAuthHeaders } from '@/services/aiAuth';
 import { FeedFilters } from '@/types/feed-filters';
 import { User } from '@/types/user';
 
@@ -109,9 +110,7 @@ export const rankMatchesWithLili = async (
     'https://us-central1-fundtinder.cloudfunctions.net/rankMatches',
     {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: await getAiAuthHeaders(),
       body: JSON.stringify({
         currentUser,
         currentPreferences,

@@ -1,8 +1,23 @@
 import { onRequest } from 'firebase-functions/v2/https';
 import { defineSecret } from 'firebase-functions/params';
+import { getAuth } from 'firebase-admin/auth';
+import { initializeApp } from 'firebase-admin/app';
 import OpenAI from 'openai';
 
+initializeApp();
 const openAiKey = defineSecret('OPENAI_API_KEY');
+
+const requireAuth = async (request: {
+  headers: { authorization?: string };
+}) => {
+  const authorization = request.headers.authorization;
+
+  if (!authorization?.startsWith('Bearer ')) {
+    throw new Error('UNAUTHENTICATED');
+  }
+
+  return getAuth().verifyIdToken(authorization.slice('Bearer '.length));
+};
 
 export const generateThemes = onRequest(
   {
@@ -11,6 +26,7 @@ export const generateThemes = onRequest(
   },
   async (request, response) => {
     try {
+      await requireAuth(request);
       const { description } = request.body;
 
       if (!description || typeof description !== 'string') {
@@ -86,6 +102,11 @@ export const generateThemes = onRequest(
         ),
       });
     } catch (error) {
+      if (error instanceof Error && error.message === 'UNAUTHENTICATED') {
+        response.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
+
       console.error(error);
 
       response.status(500).json({
@@ -102,11 +123,28 @@ export const askLili = onRequest(
   },
   async (request, response) => {
     try {
+      const user = await requireAuth(request);
       const client = new OpenAI({
         apiKey: openAiKey.value(),
       });
 
       const { messages } = request.body;
+
+      if (
+        !Array.isArray(messages) ||
+        messages.length === 0 ||
+        messages.length > 50 ||
+        messages.some(
+          (message) =>
+            !message ||
+            !['user', 'assistant'].includes(message.role) ||
+            typeof message.content !== 'string' ||
+            message.content.length > 4000,
+        )
+      ) {
+        response.status(400).json({ error: 'Invalid Lili session payload.' });
+        return;
+      }
 
       const result = await client.chat.completions.create({
         model: 'gpt-4.1-mini',
@@ -115,6 +153,8 @@ export const askLili = onRequest(
             role: 'system',
             content: `
               You are Lili AI, the in-app assistant for FundTinder.
+              The authenticated user is internally identified as ${user.uid}.
+              Never reveal this internal identifier or the session identifier.
 
               PRODUCT CONTEXT
               FundTinder connects startup founders and investors. Users create a
@@ -184,6 +224,11 @@ export const askLili = onRequest(
         answer: result.choices[0].message.content,
       });
     } catch (error) {
+      if (error instanceof Error && error.message === 'UNAUTHENTICATED') {
+        response.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
+
       console.error(error);
       response.status(500).json(error);
     }
@@ -197,6 +242,7 @@ export const rankMatches = onRequest(
   },
   async (request, response) => {
     try {
+      await requireAuth(request);
       const { currentUser, currentPreferences, candidates } = request.body;
 
       if (
@@ -337,6 +383,11 @@ export const rankMatches = onRequest(
         matches: validatedRankings,
       });
     } catch (error) {
+      if (error instanceof Error && error.message === 'UNAUTHENTICATED') {
+        response.status(401).json({ error: 'Authentication required.' });
+        return;
+      }
+
       console.error(error);
       response.status(500).json({
         error: 'Failed to rank matches.',

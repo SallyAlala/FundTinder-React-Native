@@ -18,6 +18,11 @@ import { askLili } from '@/services/liliAIService';
 import { TextField } from '@/components/ui/text-field';
 import { Button } from '@/components/ui/button';
 
+type LiliMessage = {
+  role: 'assistant' | 'user';
+  content: string;
+};
+
 export default function LiliAITabScreen() {
   const isDesktop = useIsDesktop();
   const colorScheme = useColorScheme();
@@ -26,14 +31,13 @@ export default function LiliAITabScreen() {
 
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<LiliMessage[]>([
     {
       role: 'assistant',
       content:
         "Hi! I'm Lili AI. I can help you navigate FundTinder and answer startup-related questions.",
     },
   ]);
-
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [hoveredChip, setHoveredChip] = useState<string | null>(null);
@@ -55,12 +59,13 @@ export default function LiliAITabScreen() {
       role: 'user',
       content: trimmedMessage,
     };
+    const conversation = [...messages, userMessage];
 
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages(conversation);
     setIsTyping(true);
 
     try {
-      const answer = await askLili(trimmedMessage);
+      const answer = await askLili(conversation);
 
       setMessages((prev) => [
         ...prev,

@@ -1,18 +1,20 @@
-export const askLili = async (message: string): Promise<string> => {
+import { getAiAuthHeaders } from '@/services/aiAuth';
+
+type LiliMessage = {
+  role: 'assistant' | 'user';
+  content: string;
+};
+
+export const askLili = async (
+  messages: LiliMessage[],
+): Promise<string> => {
   const response = await fetch(
     'https://us-central1-fundtinder.cloudfunctions.net/askLili',
     {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: await getAiAuthHeaders(),
       body: JSON.stringify({
-        messages: [
-          {
-            role: 'user',
-            content: message,
-          },
-        ],
+        messages,
       }),
     },
   );
