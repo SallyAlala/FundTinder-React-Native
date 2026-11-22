@@ -1,28 +1,26 @@
 import { StyleSheet, View } from 'react-native';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import ParallaxScrollView from '@/components/parallax-scroll-view/parallax-scroll-view';
+import { ThemedText } from '@/components/themed-text/themed-text';
+import { ThemedView } from '@/components/themed-view/themed-view';
 import LottieView from 'lottie-react-native';
 import { useEffect, useState } from 'react';
 import { auth } from '@/config/firebase';
-import { fetchUsersIChattedWith, getMyAppId } from '@/services/userService';
+import { fetchUsersIChattedWith, getMyAppId } from '@/services/user-service/userService';
 import Toast from 'react-native-toast-message';
 import { User } from '@/types/user';
-import { ChatRow } from '@/components/ui/chat-row';
-import { Loading } from '@/components/ui/loading';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { ChatRow } from '@/components/ui/chat-row/chat-row';
+import { Loading } from '@/components/ui/loading/loading';
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
 import { router, useLocalSearchParams } from 'expo-router';
-import { buildChatId } from '@/utils/chat-id-builder';
+import { buildChatId } from '@/utils/chat-id-builder/chat-id-builder';
 import {
   getProfilePictureUrl,
   subscribeUnreadStatus,
-} from '@/services/chatService';
-import { ChatView } from '@/components/ui/chat-view';
-import { useTranslation } from 'react-i18next';
+} from '@/services/chat-service/chatService';
+import { ChatView } from '@/components/ui/chat-view/chat-view';
 
 export default function ChatsTabScreen() {
   const isDesktop = useIsDesktop();
-  const { t } = useTranslation();
 
   const [selectedChatId, setSelectedChatId] = useState('');
   const [selectedOtherAppId, setSelectedOtherAppId] = useState('');
@@ -82,11 +80,11 @@ export default function ChatsTabScreen() {
 
         const data = await fetchUsersIChattedWith(uid);
         setUsers(data);
-      } catch {
+      } catch (error) {
         Toast.show({
           type: 'error',
-          text1: t('common.error'),
-          text2: t('auth.unknownError'),
+          text1: 'Error',
+          text2: 'An unknown error occurred, please try again later.',
         });
       } finally {
         setLoading(false);
@@ -94,7 +92,7 @@ export default function ChatsTabScreen() {
     };
 
     loadChats();
-  }, [t]);
+  }, []);
 
   useEffect(() => {
     const loadMyAppId = async () => {
@@ -125,7 +123,7 @@ export default function ChatsTabScreen() {
           isDesktop && styles.desktopTitleContainer,
         ]}
       >
-        <ThemedText type="title">{t('tabs.chats')}</ThemedText>
+        <ThemedText type="title">Chats</ThemedText>
       </ThemedView>
 
       {loading || !myAppId ? (
@@ -133,7 +131,7 @@ export default function ChatsTabScreen() {
           <Loading />
         </View>
       ) : users.length === 0 ? (
-        <ThemedText>{t('chat.noConversations')}</ThemedText>
+        <ThemedText>{'You dont have any conversations yet.'}</ThemedText>
       ) : isDesktop ? (
         <View style={styles.desktopLayout}>
           <View style={styles.chatListPane}>
@@ -167,11 +165,9 @@ export default function ChatsTabScreen() {
               />
             ) : (
               <View style={styles.emptyChatState}>
-                <ThemedText type="subtitle">
-                  {t('chat.selectConversation')}
-                </ThemedText>
-                <ThemedText style={styles.emptyChatDescription}>
-                  {t('chat.chooseConversation')}
+                <ThemedText type="subtitle">Select a conversation</ThemedText>
+                <ThemedText>
+                  Choose a chat from the list to start messaging.
                 </ThemedText>
               </View>
             )}
@@ -266,10 +262,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 24,
-  },
-
-  emptyChatDescription: {
-    textAlign: 'center',
   },
 });

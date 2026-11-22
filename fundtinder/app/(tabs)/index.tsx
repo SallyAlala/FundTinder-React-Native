@@ -1,19 +1,19 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import ParallaxScrollView from '@/components/parallax-scroll-view/parallax-scroll-view';
+import { ThemedText } from '@/components/themed-text/themed-text';
+import { ThemedView } from '@/components/themed-view/themed-view';
 import LottieView from 'lottie-react-native';
 import React, { useCallback, useState } from 'react';
-import { fetchAllUsers, getMyAppId } from '@/services/userService';
-import { ProfileCard } from '@/components/ui/card';
+import { fetchAllUsers, getMyAppId } from '@/services/user-service/userService';
+import { ProfileCard } from '@/components/ui/card/card';
 import { User } from '@/types/user';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
-import { Loading } from '@/components/ui/loading';
-import { filterUsers } from '@/utils/user-filter';
-import { fetchMyFilters } from '@/services/filterService';
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
+import { Loading } from '@/components/ui/loading/loading';
+import { filterUsers } from '@/utils/user-filter/user-filter';
+import { fetchMyFilters } from '@/services/filter-service/filterService';
 import { router, useFocusEffect } from 'expo-router';
-import { Button } from '@/components/ui/button';
-import { buildChatId } from '@/utils/chat-id-builder';
+import { Button } from '@/components/ui/button/button';
+import { buildChatId } from '@/utils/chat-id-builder/chat-id-builder';
 import {
   ArrowLeft,
   ArrowRight,
@@ -21,20 +21,18 @@ import {
   MessageCircle,
 } from 'lucide-react-native';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
 import Toast from 'react-native-toast-message';
 import {
   fetchMutualMatchAppIds,
   fetchSwipedAppIds,
   saveSwipe,
-} from '@/services/matchService';
-import { useTranslation } from 'react-i18next';
+} from '@/services/match-service/matchService';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
-  const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
   const isDesktop = useIsDesktop();
@@ -98,8 +96,8 @@ export default function HomeScreen() {
       console.error(error);
       Toast.show({
         type: 'error',
-        text1: t('common.error'),
-        text2: t('home.couldNotSaveSwipe'),
+        text1: 'Error',
+        text2: 'Could not save your swipe.',
       });
       return;
     }
@@ -127,7 +125,7 @@ export default function HomeScreen() {
           isDesktop && styles.desktopTitleContainer,
         ]}
       >
-        <ThemedText type="title">{t('home.browse')}</ThemedText>
+        <ThemedText type="title">Browse</ThemedText>
       </ThemedView>
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -136,7 +134,8 @@ export default function HomeScreen() {
       ) : users.length === 0 || !currentUser ? (
         <View style={styles.emptyFeedContainer}>
           <ThemedText style={styles.emptyFeedMessage}>
-            {t('home.caughtUp')}
+            You&apos;re all caught up! Stay tuned - new people will be joining
+            soon.
           </ThemedText>
         </View>
       ) : (
@@ -185,7 +184,7 @@ export default function HomeScreen() {
               {isDesktop && (
                 <View style={styles.desktopSwipeActions}>
                   <Pressable
-                    accessibilityLabel={t('home.swipeLeft')}
+                    accessibilityLabel="Swipe left"
                     style={[
                       styles.desktopActionButton,
                       { borderColor: colors.base, borderWidth: 3 },
@@ -195,7 +194,7 @@ export default function HomeScreen() {
                     <ArrowLeft size={28} color={colors.base} />
                   </Pressable>
                   <Pressable
-                    accessibilityLabel={t('home.swipeRight')}
+                    accessibilityLabel="Swipe right"
                     style={[
                       styles.desktopActionButton,
                       { borderColor: colors.base, borderWidth: 3 },
@@ -241,7 +240,7 @@ export default function HomeScreen() {
                 </View>
               ) : (
                 <Button
-                  title={t('home.chatRightAway')}
+                  title="Chat right away"
                   onPress={() => {
                     const chatId = buildChatId(myAppId, currentUser.uid);
                     router.push({
@@ -265,9 +264,7 @@ export default function HomeScreen() {
         onRequestClose={() => setMatchedUser(null)}
       >
         <View style={styles.matchOverlay}>
-          <View
-            style={[styles.matchCard, { backgroundColor: colors.background }]}
-          >
+          <View style={[styles.matchCard, { backgroundColor: colors.background }]}>
             <LottieView
               source={require('@/assets/lottie/money-rain.json')}
               autoPlay
@@ -275,13 +272,13 @@ export default function HomeScreen() {
               style={styles.matchAnimation}
             />
             <ThemedText type="title" style={styles.matchTitle}>
-              {t('home.match')}
+              It&apos;s a match!
             </ThemedText>
             <ThemedText style={styles.matchMessage}>
-              {t('home.matchMessage', { name: matchedUser?.name })}
+              {matchedUser?.name} wants to match with you!
             </ThemedText>
             <Button
-              title={t('home.continueBrowsing')}
+              title="Continue browsing"
               onPress={() => setMatchedUser(null)}
               style={styles.matchButton}
             />

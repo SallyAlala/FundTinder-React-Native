@@ -6,48 +6,42 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import ParallaxScrollView from '@/components/parallax-scroll-view/parallax-scroll-view';
+import { ThemedText } from '@/components/themed-text/themed-text';
+import { ThemedView } from '@/components/themed-view/themed-view';
 import { Colors, Fonts } from '@/constants/theme';
 import LottieView from 'lottie-react-native';
 import { useEffect, useRef, useState } from 'react';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { askLili } from '@/services/liliAIService';
-import { TextField } from '@/components/ui/text-field';
-import { Button } from '@/components/ui/button';
-import { useTranslation } from 'react-i18next';
-import i18n from '@/constants/i18n';
-
-type LiliMessage = {
-  role: 'assistant' | 'user';
-  content: string;
-};
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
+import { askLili } from '@/services/lili-ai/liliAIService';
+import { TextField } from '@/components/ui/text-field/text-field';
+import { Button } from '@/components/ui/button/button';
+import { LiliMessage } from '@/types/lili-message';
 
 export default function LiliAITabScreen() {
   const isDesktop = useIsDesktop();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
-  const { t } = useTranslation();
 
   const scrollViewRef = useRef<ScrollView>(null);
 
   const [messages, setMessages] = useState<LiliMessage[]>([
     {
       role: 'assistant',
-      content: t('lili.welcome'),
+      content:
+        "Hi! I'm Lili AI. I can help you navigate FundTinder and answer startup-related questions.",
     },
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [hoveredChip, setHoveredChip] = useState<string | null>(null);
   const suggestions = [
-    t('lili.whatIs'),
-    t('lili.filter'),
-    t('lili.themes'),
-    t('lili.profile'),
+    'What is FundTinder?',
+    'How can I filter users?',
+    'How do themes work?',
+    'How can I improve my profile?',
   ];
 
   const handleSend = async (message: string) => {
@@ -162,7 +156,7 @@ export default function LiliAITabScreen() {
               styles.assistantBubble,
               { backgroundColor: colors.tabBarBackgroundColor },
             ]}
-            accessibilityLabel={t('lili.typing')}
+            accessibilityLabel="Lili is typing"
           >
             <TypingIndicator color={colors.base} />
           </View>
@@ -171,13 +165,13 @@ export default function LiliAITabScreen() {
 
       <View style={styles.inputContainer}>
         <TextField
-          placeholder={t('lili.placeholder')}
+          placeholder="Ask Lili AI..."
           value={input}
           onChangeText={setInput}
         />
 
         <Button
-          title={t('lili.send')}
+          title="Send"
           onPress={() => {
             if (!input.trim()) {
               return;
@@ -229,9 +223,7 @@ function TypingIndicator({ color }: { color: string }) {
 
   return (
     <View style={styles.typingIndicator}>
-      <ThemedText style={styles.typingLabel}>
-        {i18n.t('lili.typing')}
-      </ThemedText>
+      <ThemedText style={styles.typingLabel}>Typing</ThemedText>
       {[firstDot, secondDot, thirdDot].map((dot, index) => (
         <Animated.View
           key={index}

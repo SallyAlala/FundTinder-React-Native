@@ -8,7 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { Platform } from 'react-native';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
 import { Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';

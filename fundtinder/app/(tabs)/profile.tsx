@@ -6,28 +6,28 @@ import {
   View,
 } from 'react-native';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { Collapsible } from '@/components/ui/collapsible/collapsible';
+import ParallaxScrollView from '@/components/parallax-scroll-view/parallax-scroll-view';
+import { ThemedText } from '@/components/themed-text/themed-text';
+import { ThemedView } from '@/components/themed-view/themed-view';
 import { Colors } from '@/constants/theme';
 import { User } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   fetchProfileData,
-  Profile,
   updateUserProfile,
   uploadProfilePicture,
-} from '@/services/userService';
+} from '@/services/user-service/userService';
+import { Profile } from '@/types/profile';
 import { auth } from '@/config/firebase';
 import Toast from 'react-native-toast-message';
-import { Loading } from '@/components/ui/loading';
-import { Button } from '@/components/ui/button';
-import { TextField } from '@/components/ui/text-field';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Loading } from '@/components/ui/loading/loading';
+import { Button } from '@/components/ui/button/button';
+import { TextField } from '@/components/ui/text-field/text-field';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
 import * as ImagePicker from 'expo-image-picker';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
-import { logout } from '@/services/authService';
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
+import { logout } from '@/services/auth-service/authService';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 

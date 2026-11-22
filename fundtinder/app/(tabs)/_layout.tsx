@@ -1,9 +1,9 @@
 import { Redirect, Tabs } from 'expo-router';
 import React, { useEffect } from 'react';
 
-import { HapticTab } from '@/components/haptic-tab';
+import { HapticTab } from '@/components/haptic-tab/haptic-tab';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
 import {
   Brain,
   Home,
@@ -14,7 +14,7 @@ import {
   Settings,
 } from 'lucide-react-native';
 import { useAuth } from '@/providers/auth-provider';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
 import { Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 

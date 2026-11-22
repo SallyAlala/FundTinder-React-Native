@@ -8,11 +8,7 @@ import {
 import { onAuthStateChanged, User } from 'firebase/auth';
 
 import { auth } from '@/config/firebase';
-
-type AuthContextType = {
-  user: User | null;
-  loading: boolean;
-};
+import { AuthContextType } from '@/types/auth';
 
 const AuthContext = createContext<AuthContextType>({
   user: null,

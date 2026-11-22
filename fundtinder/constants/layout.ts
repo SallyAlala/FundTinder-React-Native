@@ -1,0 +1,1 @@
+export const PARALLAX_HEADER_HEIGHT = 250;

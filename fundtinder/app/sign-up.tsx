@@ -6,9 +6,9 @@ import {
   Switch,
   View,
 } from 'react-native';
-import { TextField } from '@/components/ui/text-field';
+import { TextField } from '@/components/ui/text-field/text-field';
 import React, { useState } from 'react';
-import { ThemedText } from '@/components/themed-text';
+import { ThemedText } from '@/components/themed-text/themed-text';
 import { Colors, Fonts } from '@/constants/theme';
 import {
   ImageIcon,
@@ -19,14 +19,14 @@ import {
   PersonStandingIcon,
   WalletIcon,
 } from 'lucide-react-native';
-import { Button } from '@/components/ui/button';
-import { Screen } from '@/components/ui/screen';
-import { signUp } from '@/services/authService';
+import { Button } from '@/components/ui/button/button';
+import { Screen } from '@/components/ui/screen/screen';
+import { signUp } from '@/services/auth-service/authService';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import * as ImagePicker from 'expo-image-picker';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
 import ScrollView = Animated.ScrollView;
 import { useTranslation } from 'react-i18next';
 

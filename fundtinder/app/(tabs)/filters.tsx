@@ -3,32 +3,29 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import Toast from 'react-native-toast-message';
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { TextField } from '@/components/ui/text-field';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import ParallaxScrollView from '@/components/parallax-scroll-view/parallax-scroll-view';
+import { TextField } from '@/components/ui/text-field/text-field';
+import { ThemedText } from '@/components/themed-text/themed-text';
+import { ThemedView } from '@/components/themed-view/themed-view';
 
 import { Colors } from '@/constants/theme';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
 
 import {
   fetchAvailableCities,
   fetchMyFilters,
   saveMyFilters,
-} from '@/services/filterService';
-import { Button } from '@/components/ui/button';
+} from '@/services/filter-service/filterService';
+import { Button } from '@/components/ui/button/button';
 import { router } from 'expo-router';
-import { fetchAvailableThemes } from '@/services/userService';
-import { useTranslation } from 'react-i18next';
-import { Loading } from '@/components/ui/loading';
+import { fetchAvailableThemes } from '@/services/user-service/userService';
 
 export default function FilterTabScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
-  const { t } = useTranslation();
   const isDesktop = useIsDesktop();
 
   const [cities, setCities] = useState<string[]>([]);
@@ -57,11 +54,11 @@ export default function FilterTabScreen() {
         setSelectedCities(filters.cities);
         setMinBudget(filters.minBudget);
         setMaxBudget(filters.maxBudget);
-      } catch {
+      } catch (error) {
         Toast.show({
           type: 'error',
-          text1: t('common.error'),
-          text2: t('filters.loadFailed'),
+          text1: 'Error',
+          text2: 'Failed to load filters.',
         });
       } finally {
         setLoading(false);
@@ -69,7 +66,7 @@ export default function FilterTabScreen() {
     };
 
     loadData();
-  }, [t]);
+  }, []);
 
   const toggleTheme = (theme: string) => {
     setSelectedThemes((prev) =>
@@ -98,16 +95,16 @@ export default function FilterTabScreen() {
 
       Toast.show({
         type: 'success',
-        text1: t('common.success'),
-        text2: t('filters.saved'),
+        text1: 'Success',
+        text2: 'Filters saved successfully.',
       });
 
       router.push('/');
     } catch {
       Toast.show({
         type: 'error',
-        text1: t('common.error'),
-        text2: t('filters.saveFailed'),
+        text1: 'Error',
+        text2: 'Failed to save filters.',
       });
     } finally {
       setSavingLoading(false);
@@ -129,17 +126,13 @@ export default function FilterTabScreen() {
       contentStyle={isDesktop ? styles.desktopContentWrapper : undefined}
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">{t('tabs.filters')}</ThemedText>
+        <ThemedText type="title">Filters</ThemedText>
       </ThemedView>
 
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <Loading />
-        </View>
-      ) : (
+      {!loading && (
         <>
           <View style={styles.section}>
-            <ThemedText type="subtitle">{t('filters.themes')}</ThemedText>
+            <ThemedText type="subtitle">Themes</ThemedText>
 
             <View style={styles.cityContainer}>
               {themes.map((theme) => {
@@ -165,7 +158,7 @@ export default function FilterTabScreen() {
             </View>
           </View>
           <View style={styles.section}>
-            <ThemedText type="subtitle">{t('filters.cities')}</ThemedText>
+            <ThemedText type="subtitle">Cities</ThemedText>
 
             <View style={styles.cityContainer}>
               {cities.map((city) => {
@@ -192,26 +185,22 @@ export default function FilterTabScreen() {
           </View>
 
           <View style={styles.section}>
-            <ThemedText type="subtitle">{t('filters.budget')}</ThemedText>
+            <ThemedText type="subtitle">Budget</ThemedText>
 
             <TextField
               type="numeric"
-              label={t('filters.minimumBudget')}
+              label="Minimum Budget"
               keyboardType="numeric"
-              value={String(minBudget)}
-              onChangeText={(text) =>
-                setMinBudget(Number(text.replace(/\D/g, '')) || 0)
-              }
+              value={minBudget.toString()}
+              onChangeText={(text) => setMinBudget(Number(text) || 0)}
             />
 
             <TextField
               type="numeric"
-              label={t('filters.maximumBudget')}
+              label="Maximum Budget"
               keyboardType="numeric"
-              value={String(maxBudget)}
-              onChangeText={(text) =>
-                setMaxBudget(Number(text.replace(/\D/g, '')) || 0)
-              }
+              value={maxBudget.toString()}
+              onChangeText={(text) => setMaxBudget(Number(text) || 0)}
             />
           </View>
           <View style={isDesktop && styles.desktopButtonContainer}>
@@ -220,11 +209,11 @@ export default function FilterTabScreen() {
               disabled={savingLoading}
               loading={savingLoading}
               style={isDesktop && styles.saveButtonDesktop}
-              title={t('filters.save')}
+              title={'Save Filters'}
             ></Button>
             <Button
               type={'secondary'}
-              title={t('common.cancel')}
+              title={'Cancel'}
               style={isDesktop && styles.saveButtonDesktop}
               onPress={() => router.push('/')}
             ></Button>
@@ -260,12 +249,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     paddingBottom: 24,
-  },
-
-  loadingContainer: {
-    minHeight: 320,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 
   section: {

@@ -5,39 +5,37 @@ import { Sparkles } from 'lucide-react-native';
 import LottieView from 'lottie-react-native';
 import Toast from 'react-native-toast-message';
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { MatchCard } from '@/components/ui/match-card';
-import { Loading } from '@/components/ui/loading';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import ParallaxScrollView from '@/components/parallax-scroll-view/parallax-scroll-view';
+import { MatchCard } from '@/components/ui/match-card/match-card';
+import { Loading } from '@/components/ui/loading/loading';
+import { ThemedText } from '@/components/themed-text/themed-text';
+import { ThemedView } from '@/components/themed-view/themed-view';
 import { Colors } from '@/constants/theme';
 import { auth } from '@/config/firebase';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
-import { fetchFiltersByAppId, fetchMyFilters } from '@/services/filterService';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
+import {
+  fetchFiltersByAppId,
+  fetchMyFilters,
+} from '@/services/filter-service/filterService';
 import {
   fetchAllUsers,
   fetchUserByAppId,
   getMyAppId,
-} from '@/services/userService';
+} from '@/services/user-service/userService';
 import { FeedFilters } from '@/types/feed-filters';
-import { User } from '@/types/user';
-import { buildChatId } from '@/utils/chat-id-builder';
-import { getOrCreateChat } from '@/services/chatService';
+import { buildChatId } from '@/utils/chat-id-builder/chat-id-builder';
+import { getOrCreateChat } from '@/services/chat-service/chatService';
 import {
-  AiMatchRanking,
   fetchMutualMatchAppIds,
   rankMatchesWithLili,
   unmatch,
-} from '@/services/matchService';
-import { useTranslation } from 'react-i18next';
-
-type RankedMatch = User & AiMatchRanking;
+} from '@/services/match-service/matchService';
+import { RankedMatch } from '@/types/match';
 
 export default function MatchesTabScreen() {
   const colorScheme = useColorScheme();
   const colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
-  const { t } = useTranslation();
   const isDesktop = useIsDesktop();
   const [matches, setMatches] = useState<RankedMatch[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,7 +62,9 @@ export default function MatchesTabScreen() {
         fetchAllUsers(),
         fetchMyFilters(),
       ]);
-      const mutualMatchAppIds = new Set(await fetchMutualMatchAppIds(myAppId));
+      const mutualMatchAppIds = new Set(
+        await fetchMutualMatchAppIds(myAppId),
+      );
 
       if (!currentUser) {
         throw new Error('Current user profile not found');
@@ -110,20 +110,22 @@ export default function MatchesTabScreen() {
 
           return { ...candidate, ...ranking };
         })
-        .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+        .sort(
+          (a, b) => b.score - a.score || a.name.localeCompare(b.name),
+        );
 
       setMatches(rankedMatches);
     } catch (error) {
       console.error(error);
       Toast.show({
         type: 'error',
-        text1: t('common.error'),
-        text2: t('matches.loadFailed'),
+        text1: 'Error',
+        text2: 'Failed to load matches.',
       });
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -146,7 +148,7 @@ export default function MatchesTabScreen() {
       contentStyle={isDesktop ? styles.desktopContentWrapper : undefined}
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">{t('tabs.matches')}</ThemedText>
+        <ThemedText type="title">Matches</ThemedText>
       </ThemedView>
 
       <View
@@ -157,8 +159,11 @@ export default function MatchesTabScreen() {
       >
         <Sparkles size={22} color={colors.base} />
         <View style={styles.infoContent}>
-          <ThemedText type="defaultSemiBold">{t('matches.ranking')}</ThemedText>
-          <ThemedText>{t('matches.rankingDescription')}</ThemedText>
+          <ThemedText type="defaultSemiBold">Lili AI ranking</ThemedText>
+          <ThemedText>
+            Lili AI ranked your mutual matches from strongest to weakest based
+            on your preferences.
+          </ThemedText>
         </View>
       </View>
 
@@ -167,7 +172,7 @@ export default function MatchesTabScreen() {
           <Loading />
         </View>
       ) : matches.length === 0 ? (
-        <ThemedText>{t('matches.none')}</ThemedText>
+        <ThemedText>No mutual matches yet.</ThemedText>
       ) : (
         matches.map((match, index) => (
           <MatchCard
@@ -192,8 +197,8 @@ export default function MatchesTabScreen() {
                 console.error(error);
                 Toast.show({
                   type: 'error',
-                  text1: t('common.error'),
-                  text2: t('matches.unmatchFailed'),
+                  text1: 'Error',
+                  text2: 'Could not unmatch this person.',
                 });
               }
             }}
@@ -215,8 +220,8 @@ export default function MatchesTabScreen() {
                 console.error(error);
                 Toast.show({
                   type: 'error',
-                  text1: t('common.error'),
-                  text2: t('matches.openChatFailed'),
+                  text1: 'Error',
+                  text2: 'Could not open this chat.',
                 });
               }
             }}

@@ -1,18 +1,17 @@
 import { Platform, StyleSheet, View } from 'react-native';
-import { TextField } from '@/components/ui/text-field';
+import { TextField } from '@/components/ui/text-field/text-field';
 import { useState } from 'react';
-import { ThemedText } from '@/components/themed-text';
+import { ThemedText } from '@/components/themed-text/themed-text';
 import { Colors, Fonts } from '@/constants/theme';
 import { Lock, Mail } from 'lucide-react-native';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button/button';
 import LottieView from 'lottie-react-native';
-import { Screen } from '@/components/ui/screen';
-import { login } from '@/services/authService';
+import { Screen } from '@/components/ui/screen/screen';
+import { login } from '@/services/auth-service/authService';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useTranslation } from 'react-i18next';
+import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
 
 export default function LoginScreen() {
   const isDesktop = useIsDesktop();
@@ -20,7 +19,6 @@ export default function LoginScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
-  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,14 +34,14 @@ export default function LoginScreen() {
       if (error.code === 'auth/invalid-credential') {
         Toast.show({
           type: 'error',
-          text1: t('common.error'),
-          text2: t('auth.incorrectCredentials'),
+          text1: 'Error',
+          text2: 'Incorrect email or password!',
         });
       } else {
         Toast.show({
           type: 'error',
-          text1: t('common.error'),
-          text2: t('auth.unknownError'),
+          text1: 'Error',
+          text2: 'An unknown error occurred, please try again later!',
         });
       }
     } finally {
@@ -72,23 +70,24 @@ export default function LoginScreen() {
                 marginBottom: 24,
               }}
             >
-              {t('auth.connect')}
+              Connect founders with investors.
             </ThemedText>
 
             <ThemedText style={styles.desktopDescription}>
-              {t('auth.description')}
+              FundTinder helps entrepreneurs find the right investors and
+              investors discover promising startup ideas.
             </ThemedText>
 
             <ThemedText style={styles.desktopBullet}>
-              {t('auth.discover')}
+              🚀 Discover startup opportunities
             </ThemedText>
 
             <ThemedText style={styles.desktopBullet}>
-              {t('auth.funding')}
+              💰 Find investors and funding
             </ThemedText>
 
             <ThemedText style={styles.desktopBullet}>
-              {t('auth.connections')}
+              🤝 Build valuable business connections
             </ThemedText>
           </View>
 
@@ -106,13 +105,13 @@ export default function LoginScreen() {
                 marginBottom: 32,
               }}
             >
-              {t('auth.loginOrSignUp')}
+              Login or Sign up
             </ThemedText>
 
             <TextField
               required
               type="emailAddress"
-              placeholder={t('auth.email')}
+              placeholder="Enter your email"
               value={email}
               onChangeText={setEmail}
               icon={<Mail size={18} />}
@@ -121,7 +120,7 @@ export default function LoginScreen() {
             <TextField
               required
               type="password"
-              placeholder={t('auth.password')}
+              placeholder="Enter your password"
               value={password}
               onChangeText={setPassword}
               icon={<Lock size={18} />}
@@ -129,7 +128,7 @@ export default function LoginScreen() {
 
             <View style={styles.desktopButtonContainer}>
               <Button
-                title={t('common.login')}
+                title="Login"
                 loading={loading}
                 disabled={loading}
                 onPress={onLoginButtonClick}
@@ -137,7 +136,7 @@ export default function LoginScreen() {
               />
 
               <Button
-                title={t('common.signUp')}
+                title="Sign Up"
                 type="secondary"
                 onPress={() => router.navigate('/sign-up')}
                 style={styles.desktopButton}
@@ -176,13 +175,13 @@ export default function LoginScreen() {
               marginBottom: 32,
             }}
           >
-            {t('auth.loginOrSignUp')}
+            Login or Sign up
           </ThemedText>
 
           <TextField
             required
             type="emailAddress"
-            placeholder={t('auth.email')}
+            placeholder="Enter your email"
             value={email}
             onChangeText={setEmail}
             icon={<Mail size={18} />}
@@ -190,7 +189,7 @@ export default function LoginScreen() {
           <TextField
             required
             type="password"
-            placeholder={t('auth.password')}
+            placeholder="Enter your password"
             value={password}
             onChangeText={setPassword}
             icon={<Lock size={18} />}
@@ -213,7 +212,7 @@ export default function LoginScreen() {
             ]}
           >
             <Button
-              title={t('common.login')}
+              title="Login"
               loading={loading}
               disabled={loading}
               onPress={onLoginButtonClick}
@@ -221,7 +220,7 @@ export default function LoginScreen() {
             />
 
             <Button
-              title={t('common.signUp')}
+              title="Sign Up"
               type="secondary"
               onPress={() => router.navigate('/sign-up')}
               style={isDesktop ? styles.desktopButton : undefined}
