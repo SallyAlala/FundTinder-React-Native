@@ -14,13 +14,22 @@ const defaultFilters: FeedFilters = {
 export const fetchMyFilters = async (): Promise<FeedFilters> => {
   const appId = await getMyAppId();
 
+  return fetchFiltersByAppId(appId);
+};
+
+export const fetchFiltersByAppId = async (
+  appId: string,
+): Promise<FeedFilters> => {
   const snapshot = await getDoc(doc(db, 'filters', appId));
 
   if (!snapshot.exists()) {
-    return defaultFilters;
+    return { ...defaultFilters };
   }
 
-  return snapshot.data() as FeedFilters;
+  return {
+    ...defaultFilters,
+    ...(snapshot.data() as Partial<FeedFilters>),
+  };
 };
 
 export const saveMyFilters = async (filters: FeedFilters): Promise<void> => {
@@ -43,29 +52,4 @@ export const fetchAvailableCities = async (): Promise<string[]> => {
   });
 
   return [...cities].sort();
-};
-
-export const generateThemes = async (
-  description: string,
-): Promise<string[]> => {
-  const response = await fetch(
-    'https://us-central1-fundtinder.cloudfunctions.net/generateThemes',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        description,
-      }),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error('Failed to generate themes');
-  }
-
-  const data = await response.json();
-
-  return data.result.themes ?? [];
 };

@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { User } from '@/types/user';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { generateThemes } from '@/services/filterService';
+import { generateThemes } from '@/services/themeService';
 
 export type Profile = {
   name: string;
@@ -21,7 +21,7 @@ export type Profile = {
   profilePictureUrl: string;
 };
 
-export const getMyAppId = async () => {
+export const getMyAppId = async (): Promise<string> => {
   const firebaseUid = auth.currentUser?.uid;
 
   if (!firebaseUid) {
@@ -29,8 +29,13 @@ export const getMyAppId = async () => {
   }
 
   const snapshot = await getDoc(doc(db, 'userMap', firebaseUid));
+  const appId = snapshot.data()?.appId;
 
-  return snapshot.data()?.appId;
+  if (typeof appId !== 'string' || !appId) {
+    throw new Error('User mapping not found');
+  }
+
+  return appId;
 };
 
 export const fetchUserByAppId = async (appId: string): Promise<User | null> => {

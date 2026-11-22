@@ -2,9 +2,11 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   updateDoc,
 } from 'firebase/firestore';
 
@@ -61,6 +63,25 @@ export const sendMessage = async (
     lastMessageSenderId: senderId,
     lastMessageText: text,
   });
+};
+
+export const getOrCreateChat = async (
+  chatId: string,
+  participants: string[],
+) => {
+  const chatRef = doc(db, 'chat', chatId);
+  let chatSnapshot;
+
+  try {
+    chatSnapshot = await getDoc(chatRef);
+  } catch {
+    await setDoc(chatRef, { participants });
+    return;
+  }
+
+  if (!chatSnapshot.exists()) {
+    await setDoc(chatRef, { participants });
+  }
 };
 
 export const markChatAsRead = async (chatId: string, myAppId: string) => {

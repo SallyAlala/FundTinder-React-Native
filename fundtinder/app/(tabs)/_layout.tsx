@@ -9,6 +9,7 @@ import {
   Home,
   ListFilterPlus,
   MessageCircleHeart,
+  Sparkles,
   User,
 } from 'lucide-react-native';
 import { useAuth } from '@/providers/auth-provider';
@@ -103,6 +104,13 @@ export default function TabLayout() {
         options={{
           title: !isDesktop ? 'Filters' : '',
           tabBarIcon: ({ color }) => <ListFilterPlus size={28} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="matches"
+        options={{
+          title: !isDesktop ? 'Matches' : '',
+          tabBarIcon: ({ color }) => <Sparkles size={28} color={color} />,
         }}
       />
       <Tabs.Screen
