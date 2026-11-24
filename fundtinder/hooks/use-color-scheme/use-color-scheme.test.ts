@@ -2,6 +2,14 @@ import { renderHook, waitFor } from '@testing-library/react-native';
 import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
 import { useColorScheme as useWebColorScheme } from './use-color-scheme.web';
 
+jest.mock('@/providers/preferences-provider', () => ({
+  resolveTheme: (
+    preference: 'system' | 'light' | 'dark',
+    systemTheme: 'light' | 'dark' | null,
+  ) => (preference === 'system' ? (systemTheme ?? 'light') : preference),
+  usePreferences: jest.fn(() => ({ theme: 'system' })),
+}));
+
 jest.mock('react-native', () => {
   const actual = jest.requireActual('react-native');
   const mockedUseColorScheme = jest.fn();
@@ -65,13 +73,13 @@ describe('useColorScheme', () => {
       });
     });
 
-    it('should preserve a null native scheme after hydration', async () => {
+    it('should fall back to light when the native scheme is null', async () => {
       mockedUseNativeColorScheme.mockReturnValue(null);
 
       const { result } = renderHook(() => useWebColorScheme());
 
       await waitFor(() => {
-        expect(result.current).toBeNull();
+        expect(result.current).toBe('light');
       });
     });
   });

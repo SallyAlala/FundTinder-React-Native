@@ -28,11 +28,13 @@ import {
   fetchSwipedAppIds,
   saveSwipe,
 } from '@/services/match-service/matchService';
+import { useTranslation } from 'react-i18next';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
+  const { t } = useTranslation();
 
   const [loading, setLoading] = useState(true);
   const isDesktop = useIsDesktop();
@@ -96,8 +98,8 @@ export default function HomeScreen() {
       console.error(error);
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'Could not save your swipe.',
+        text1: t('common.error'),
+        text2: t('home.couldNotSaveSwipe'),
       });
       return;
     }
@@ -125,7 +127,7 @@ export default function HomeScreen() {
           isDesktop && styles.desktopTitleContainer,
         ]}
       >
-        <ThemedText type="title">Browse</ThemedText>
+        <ThemedText type="title">{t('home.browse')}</ThemedText>
       </ThemedView>
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -134,8 +136,7 @@ export default function HomeScreen() {
       ) : users.length === 0 || !currentUser ? (
         <View style={styles.emptyFeedContainer}>
           <ThemedText style={styles.emptyFeedMessage}>
-            You&apos;re all caught up! Stay tuned - new people will be joining
-            soon.
+            {t('home.caughtUp')}
           </ThemedText>
         </View>
       ) : (
@@ -184,7 +185,7 @@ export default function HomeScreen() {
               {isDesktop && (
                 <View style={styles.desktopSwipeActions}>
                   <Pressable
-                    accessibilityLabel="Swipe left"
+                    accessibilityLabel={t('home.swipeLeft')}
                     style={[
                       styles.desktopActionButton,
                       { borderColor: colors.base, borderWidth: 3 },
@@ -194,7 +195,7 @@ export default function HomeScreen() {
                     <ArrowLeft size={28} color={colors.base} />
                   </Pressable>
                   <Pressable
-                    accessibilityLabel="Swipe right"
+                    accessibilityLabel={t('home.swipeRight')}
                     style={[
                       styles.desktopActionButton,
                       { borderColor: colors.base, borderWidth: 3 },
@@ -240,7 +241,7 @@ export default function HomeScreen() {
                 </View>
               ) : (
                 <Button
-                  title="Chat right away"
+                  title={t('home.chatRightAway')}
                   onPress={() => {
                     const chatId = buildChatId(myAppId, currentUser.uid);
                     router.push({
@@ -272,13 +273,13 @@ export default function HomeScreen() {
               style={styles.matchAnimation}
             />
             <ThemedText type="title" style={styles.matchTitle}>
-              It&apos;s a match!
+              {t('home.match')}
             </ThemedText>
             <ThemedText style={styles.matchMessage}>
-              {matchedUser?.name} wants to match with you!
+              {t('home.matchMessage', { name: matchedUser?.name })}
             </ThemedText>
             <Button
-              title="Continue browsing"
+              title={t('home.continueBrowsing')}
               onPress={() => setMatchedUser(null)}
               style={styles.matchButton}
             />

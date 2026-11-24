@@ -18,31 +18,46 @@ import { askLili } from '@/services/lili-ai/liliAIService';
 import { TextField } from '@/components/ui/text-field/text-field';
 import { Button } from '@/components/ui/button/button';
 import { LiliMessage } from '@/types/lili-message';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/constants/i18n';
 
 export default function LiliAITabScreen() {
   const isDesktop = useIsDesktop();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
+  const { t, i18n } = useTranslation();
 
   const scrollViewRef = useRef<ScrollView>(null);
 
   const [messages, setMessages] = useState<LiliMessage[]>([
     {
       role: 'assistant',
-      content:
-        "Hi! I'm Lili AI. I can help you navigate FundTinder and answer startup-related questions.",
+      content: t('lili.welcome'),
     },
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [hoveredChip, setHoveredChip] = useState<string | null>(null);
   const suggestions = [
-    'What is FundTinder?',
-    'How can I filter users?',
-    'How do themes work?',
-    'How can I improve my profile?',
+    t('lili.whatIs'),
+    t('lili.filter'),
+    t('lili.themes'),
+    t('lili.profile'),
   ];
+
+  useEffect(() => {
+    setMessages((currentMessages) => {
+      if (
+        currentMessages.length !== 1 ||
+        currentMessages[0].role !== 'assistant'
+      ) {
+        return currentMessages;
+      }
+
+      return [{ role: 'assistant', content: t('lili.welcome') }];
+    });
+  }, [i18n.language, t]);
 
   const handleSend = async (message: string) => {
     const trimmedMessage = message.trim();
@@ -156,7 +171,7 @@ export default function LiliAITabScreen() {
               styles.assistantBubble,
               { backgroundColor: colors.tabBarBackgroundColor },
             ]}
-            accessibilityLabel="Lili is typing"
+            accessibilityLabel={t('lili.typing')}
           >
             <TypingIndicator color={colors.base} />
           </View>
@@ -165,13 +180,13 @@ export default function LiliAITabScreen() {
 
       <View style={styles.inputContainer}>
         <TextField
-          placeholder="Ask Lili AI..."
+          placeholder={t('lili.placeholder')}
           value={input}
           onChangeText={setInput}
         />
 
         <Button
-          title="Send"
+          title={t('lili.send')}
           onPress={() => {
             if (!input.trim()) {
               return;
@@ -223,7 +238,9 @@ function TypingIndicator({ color }: { color: string }) {
 
   return (
     <View style={styles.typingIndicator}>
-      <ThemedText style={styles.typingLabel}>Typing</ThemedText>
+      <ThemedText style={styles.typingLabel}>
+        {i18n.t('lili.typing')}
+      </ThemedText>
       {[firstDot, secondDot, thirdDot].map((dot, index) => (
         <Animated.View
           key={index}

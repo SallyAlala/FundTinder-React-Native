@@ -22,6 +22,7 @@ import { Colors } from '@/constants/theme';
 import { Collapsible } from '@/components/ui/collapsible/collapsible';
 import { useIsDesktop } from '@/hooks/use-is-desktop/use-is-desktop';
 import { getProfilePictureUrl } from '@/services/chat-service/chatService';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   name: string;
@@ -51,11 +52,12 @@ export function ProfileCard({
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
+  const { t } = useTranslation();
 
   const translateX = useSharedValue(0);
   const rotate = useSharedValue(0);
 
-  const roleText = investor ? '💼 Investor' : '🚀 Founder';
+  const roleText = investor ? t('card.investor') : t('card.founder');
 
   const gesture = Gesture.Pan()
     .onUpdate((event) => {
@@ -154,19 +156,19 @@ export function ProfileCard({
         </View>
 
         <View style={styles.content}>
-          <Collapsible title="👤 Name">
+          <Collapsible title={t('card.name')}>
             <ThemedText type="subtitle">{name}</ThemedText>
           </Collapsible>
 
-          <Collapsible title="📍 Location">
+          <Collapsible title={t('card.location')}>
             <ThemedText>{city}</ThemedText>
           </Collapsible>
 
-          <Collapsible title="💰 Budget">
+          <Collapsible title={t('card.budget')}>
             <ThemedText type="numeric">{budget}</ThemedText>
           </Collapsible>
 
-          <Collapsible title="📝 Description">
+          <Collapsible title={t('card.description')}>
             <ThemedText style={styles.description}>{description}</ThemedText>
           </Collapsible>
         </View>

@@ -1,7 +1,10 @@
 /** @type {import('jest').Config} */
+const expoPreset = require('jest-expo/jest-preset.js');
+
 module.exports = {
-  ...require('jest-expo/jest-preset.js'),
+  ...expoPreset,
   testPathIgnorePatterns: ['/node_modules/', '/functions/'],
+  setupFiles: [...(expoPreset.setupFiles || []), '<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^@/hooks/use-color-scheme/use-color-scheme$':
       '<rootDir>/hooks/use-color-scheme/use-color-scheme.ts',

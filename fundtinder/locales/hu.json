@@ -10,6 +10,7 @@
   },
   "auth": {
     "loginOrSignUp": "Bejelentkezés vagy regisztráció",
+    "signUpTitle": "Regisztráció",
     "email": "Add meg az e-mail-címed",
     "password": "Add meg a jelszavad",
     "incorrectCredentials": "Helytelen e-mail-cím vagy jelszó!",
@@ -72,7 +73,28 @@
     "save": "Szűrők mentése",
     "saved": "A szűrők mentése sikeres.",
     "loadFailed": "Nem sikerült betölteni a szűrőket.",
-    "saveFailed": "Nem sikerült menteni a szűrőket."
+    "saveFailed": "Nem sikerült menteni a szűrőket.",
+    "themeLabels": {
+      "businessGrowth": "Üzleti növekedés",
+      "digitalProducts": "Digitális termékek",
+      "edTech": "Oktatástechnológia",
+      "genZ": "Z generáció",
+      "mentalHealth": "Mentális egészség",
+      "philanthropy": "Filantrópia",
+      "productDevelopment": "Termékfejlesztés",
+      "software": "Szoftver",
+      "strategicInvestment": "Stratégiai befektetés",
+      "technology": "Technológia",
+      "technologyInnovation": "Technológiai innováció",
+      "wellnessApp": "Wellness alkalmazás"
+    },
+    "cityLabels": {
+      "amsterdam": "Amszterdam",
+      "budapest": "Budapest",
+      "demo": "Demo",
+      "london": "London",
+      "washingtonDc": "Washington D.C."
+    }
   },
   "profile": {
     "name": "Név",
@@ -85,6 +107,7 @@
     "edit": "Profil szerkesztése",
     "save": "Profil mentése",
     "logout": "Kijelentkezés",
+    "loadFailed": "Ismeretlen hiba történt, kérjük, próbálja újra később.",
     "updated": "A profil frissítése sikeres.",
     "updateFailed": "Nem sikerült frissíteni a profilt.",
     "logoutFailed": "Nem sikerült kijelentkezni."

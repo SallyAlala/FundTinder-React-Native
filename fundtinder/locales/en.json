@@ -10,6 +10,7 @@
   },
   "auth": {
     "loginOrSignUp": "Login or Sign up",
+    "signUpTitle": "Sign up",
     "email": "Enter your email",
     "password": "Enter your password",
     "incorrectCredentials": "Incorrect email or password!",
@@ -72,7 +73,28 @@
     "save": "Save Filters",
     "saved": "Filters saved successfully.",
     "loadFailed": "Failed to load filters.",
-    "saveFailed": "Failed to save filters."
+    "saveFailed": "Failed to save filters.",
+    "themeLabels": {
+      "businessGrowth": "Business Growth",
+      "digitalProducts": "Digital Products",
+      "edTech": "EdTech",
+      "genZ": "Gen Z",
+      "mentalHealth": "Mental Health",
+      "philanthropy": "Philanthropy",
+      "productDevelopment": "Product Development",
+      "software": "Software",
+      "strategicInvestment": "Strategic Investment",
+      "technology": "Technology",
+      "technologyInnovation": "Technology Innovation",
+      "wellnessApp": "Wellness App"
+    },
+    "cityLabels": {
+      "amsterdam": "Amsterdam",
+      "budapest": "Budapest",
+      "demo": "Demo",
+      "london": "London",
+      "washingtonDc": "Washington D.C."
+    }
   },
   "profile": {
     "name": "Name",
@@ -85,6 +107,7 @@
     "edit": "Edit profile",
     "save": "Save profile",
     "logout": "Logout",
+    "loadFailed": "An unknown error occurred, please try again later.",
     "updated": "Profile updated successfully.",
     "updateFailed": "Failed to update profile.",
     "logoutFailed": "Failed to sign out."

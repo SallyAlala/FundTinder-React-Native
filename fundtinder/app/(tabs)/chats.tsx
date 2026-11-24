@@ -18,9 +18,11 @@ import {
   subscribeUnreadStatus,
 } from '@/services/chat-service/chatService';
 import { ChatView } from '@/components/ui/chat-view/chat-view';
+import { useTranslation } from 'react-i18next';
 
 export default function ChatsTabScreen() {
   const isDesktop = useIsDesktop();
+  const { t } = useTranslation();
 
   const [selectedChatId, setSelectedChatId] = useState('');
   const [selectedOtherAppId, setSelectedOtherAppId] = useState('');
@@ -83,8 +85,8 @@ export default function ChatsTabScreen() {
       } catch (error) {
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'An unknown error occurred, please try again later.',
+          text1: t('common.error'),
+          text2: t('auth.unknownError'),
         });
       } finally {
         setLoading(false);
@@ -92,7 +94,7 @@ export default function ChatsTabScreen() {
     };
 
     loadChats();
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const loadMyAppId = async () => {
@@ -123,7 +125,7 @@ export default function ChatsTabScreen() {
           isDesktop && styles.desktopTitleContainer,
         ]}
       >
-        <ThemedText type="title">Chats</ThemedText>
+        <ThemedText type="title">{t('tabs.chats')}</ThemedText>
       </ThemedView>
 
       {loading || !myAppId ? (
@@ -131,7 +133,7 @@ export default function ChatsTabScreen() {
           <Loading />
         </View>
       ) : users.length === 0 ? (
-        <ThemedText>{'You dont have any conversations yet.'}</ThemedText>
+        <ThemedText>{t('chat.noConversations')}</ThemedText>
       ) : isDesktop ? (
         <View style={styles.desktopLayout}>
           <View style={styles.chatListPane}>
@@ -165,9 +167,11 @@ export default function ChatsTabScreen() {
               />
             ) : (
               <View style={styles.emptyChatState}>
-                <ThemedText type="subtitle">Select a conversation</ThemedText>
-                <ThemedText>
-                  Choose a chat from the list to start messaging.
+                <ThemedText type="subtitle">
+                  {t('chat.selectConversation')}
+                </ThemedText>
+                <ThemedText style={styles.emptyChatDescription}>
+                  {t('chat.chooseConversation')}
                 </ThemedText>
               </View>
             )}
@@ -262,5 +266,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+
+  emptyChatDescription: {
+    textAlign: 'center',
   },
 });

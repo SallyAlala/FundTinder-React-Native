@@ -123,7 +123,7 @@ describe('Chats screen', () => {
       const { getByText } = render(<ChatsTabScreen />);
 
       await waitFor(() =>
-        expect(getByText('You dont have any conversations yet.')).toBeTruthy(),
+        expect(getByText("You don't have any conversations yet.")).toBeTruthy(),
       );
     });
 
@@ -185,7 +185,7 @@ describe('Chats screen', () => {
           expect.objectContaining({
             type: 'error',
             text1: 'Error',
-            text2: 'An unknown error occurred, please try again later.',
+            text2: 'An unknown error occurred, please try again later!',
           }),
         );
       });

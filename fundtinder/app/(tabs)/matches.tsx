@@ -32,11 +32,13 @@ import {
   unmatch,
 } from '@/services/match-service/matchService';
 import { RankedMatch } from '@/types/match';
+import { useTranslation } from 'react-i18next';
 
 export default function MatchesTabScreen() {
   const colorScheme = useColorScheme();
   const colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
   const isDesktop = useIsDesktop();
+  const { t } = useTranslation();
   const [matches, setMatches] = useState<RankedMatch[]>([]);
   const [loading, setLoading] = useState(true);
   const [myAppId, setMyAppId] = useState('');
@@ -119,13 +121,13 @@ export default function MatchesTabScreen() {
       console.error(error);
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'Failed to load matches.',
+        text1: t('common.error'),
+        text2: t('matches.loadFailed'),
       });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useFocusEffect(
     useCallback(() => {
@@ -148,7 +150,7 @@ export default function MatchesTabScreen() {
       contentStyle={isDesktop ? styles.desktopContentWrapper : undefined}
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Matches</ThemedText>
+        <ThemedText type="title">{t('tabs.matches')}</ThemedText>
       </ThemedView>
 
       <View
@@ -159,10 +161,11 @@ export default function MatchesTabScreen() {
       >
         <Sparkles size={22} color={colors.base} />
         <View style={styles.infoContent}>
-          <ThemedText type="defaultSemiBold">Lili AI ranking</ThemedText>
+          <ThemedText type="defaultSemiBold">
+            {t('matches.ranking')}
+          </ThemedText>
           <ThemedText>
-            Lili AI ranked your mutual matches from strongest to weakest based
-            on your preferences.
+            {t('matches.rankingDescription')}
           </ThemedText>
         </View>
       </View>
@@ -172,7 +175,7 @@ export default function MatchesTabScreen() {
           <Loading />
         </View>
       ) : matches.length === 0 ? (
-        <ThemedText>No mutual matches yet.</ThemedText>
+        <ThemedText>{t('matches.none')}</ThemedText>
       ) : (
         matches.map((match, index) => (
           <MatchCard
@@ -197,8 +200,8 @@ export default function MatchesTabScreen() {
                 console.error(error);
                 Toast.show({
                   type: 'error',
-                  text1: 'Error',
-                  text2: 'Could not unmatch this person.',
+                          text1: t('common.error'),
+                          text2: t('matches.unmatchFailed'),
                 });
               }
             }}
@@ -220,8 +223,8 @@ export default function MatchesTabScreen() {
                 console.error(error);
                 Toast.show({
                   type: 'error',
-                  text1: 'Error',
-                  text2: 'Could not open this chat.',
+                  text1: t('common.error'),
+                  text2: t('matches.openChatFailed'),
                 });
               }
             }}

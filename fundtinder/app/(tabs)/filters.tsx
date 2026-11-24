@@ -21,12 +21,38 @@ import {
 import { Button } from '@/components/ui/button/button';
 import { router } from 'expo-router';
 import { fetchAvailableThemes } from '@/services/user-service/userService';
+import { useTranslation } from 'react-i18next';
+
+const filterLabelKeys: Record<string, string> = {
+  'Business Growth': 'businessGrowth',
+  'Digital Products': 'digitalProducts',
+  EdTech: 'edTech',
+  'Gen Z': 'genZ',
+  'Mental Health': 'mentalHealth',
+  Philanthropy: 'philanthropy',
+  'Product Development': 'productDevelopment',
+  Software: 'software',
+  'Strategic Investment': 'strategicInvestment',
+  Technology: 'technology',
+  'Technology Innovation': 'technologyInnovation',
+  'Wellness App': 'wellnessApp',
+  Amsterdam: 'amsterdam',
+  Budapest: 'budapest',
+  Demo: 'demo',
+  London: 'london',
+  'Washington D.C.': 'washingtonDc',
+};
 
 export default function FilterTabScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
   const isDesktop = useIsDesktop();
+  const { t } = useTranslation();
+  const getFilterLabel = (group: 'themeLabels' | 'cityLabels', value: string) =>
+    t(`filters.${group}.${filterLabelKeys[value] ?? value}`, {
+      defaultValue: value,
+    });
 
   const [cities, setCities] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
@@ -57,8 +83,8 @@ export default function FilterTabScreen() {
       } catch (error) {
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'Failed to load filters.',
+          text1: t('common.error'),
+          text2: t('filters.loadFailed'),
         });
       } finally {
         setLoading(false);
@@ -66,7 +92,7 @@ export default function FilterTabScreen() {
     };
 
     loadData();
-  }, []);
+  }, [t]);
 
   const toggleTheme = (theme: string) => {
     setSelectedThemes((prev) =>
@@ -95,16 +121,16 @@ export default function FilterTabScreen() {
 
       Toast.show({
         type: 'success',
-        text1: 'Success',
-        text2: 'Filters saved successfully.',
+        text1: t('common.success'),
+        text2: t('filters.saved'),
       });
 
       router.push('/');
     } catch {
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'Failed to save filters.',
+        text1: t('common.error'),
+        text2: t('filters.saveFailed'),
       });
     } finally {
       setSavingLoading(false);
@@ -126,13 +152,13 @@ export default function FilterTabScreen() {
       contentStyle={isDesktop ? styles.desktopContentWrapper : undefined}
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Filters</ThemedText>
+        <ThemedText type="title">{t('tabs.filters')}</ThemedText>
       </ThemedView>
 
       {!loading && (
         <>
           <View style={styles.section}>
-            <ThemedText type="subtitle">Themes</ThemedText>
+            <ThemedText type="subtitle">{t('filters.themes')}</ThemedText>
 
             <View style={styles.cityContainer}>
               {themes.map((theme) => {
@@ -150,7 +176,7 @@ export default function FilterTabScreen() {
                   >
                     <ThemedText>
                       {selected ? '✓ ' : ''}
-                      {theme}
+                      {getFilterLabel('themeLabels', theme)}
                     </ThemedText>
                   </Pressable>
                 );
@@ -158,7 +184,7 @@ export default function FilterTabScreen() {
             </View>
           </View>
           <View style={styles.section}>
-            <ThemedText type="subtitle">Cities</ThemedText>
+            <ThemedText type="subtitle">{t('filters.cities')}</ThemedText>
 
             <View style={styles.cityContainer}>
               {cities.map((city) => {
@@ -176,7 +202,7 @@ export default function FilterTabScreen() {
                   >
                     <ThemedText>
                       {selected ? '✓ ' : ''}
-                      {city}
+                      {getFilterLabel('cityLabels', city)}
                     </ThemedText>
                   </Pressable>
                 );
@@ -185,11 +211,11 @@ export default function FilterTabScreen() {
           </View>
 
           <View style={styles.section}>
-            <ThemedText type="subtitle">Budget</ThemedText>
+            <ThemedText type="subtitle">{t('filters.budget')}</ThemedText>
 
             <TextField
               type="numeric"
-              label="Minimum Budget"
+              label={t('filters.minimumBudget')}
               keyboardType="numeric"
               value={minBudget.toString()}
               onChangeText={(text) => setMinBudget(Number(text) || 0)}
@@ -197,7 +223,7 @@ export default function FilterTabScreen() {
 
             <TextField
               type="numeric"
-              label="Maximum Budget"
+              label={t('filters.maximumBudget')}
               keyboardType="numeric"
               value={maxBudget.toString()}
               onChangeText={(text) => setMaxBudget(Number(text) || 0)}
@@ -209,11 +235,11 @@ export default function FilterTabScreen() {
               disabled={savingLoading}
               loading={savingLoading}
               style={isDesktop && styles.saveButtonDesktop}
-              title={'Save Filters'}
+              title={t('filters.save')}
             ></Button>
             <Button
               type={'secondary'}
-              title={'Cancel'}
+              title={t('common.cancel')}
               style={isDesktop && styles.saveButtonDesktop}
               onPress={() => router.push('/')}
             ></Button>

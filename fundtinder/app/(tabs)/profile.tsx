@@ -76,7 +76,7 @@ export default function ProfileTabScreen() {
         Toast.show({
           type: 'error',
           text1: t('common.error'),
-          text2: t('auth.unknownError'),
+          text2: t('profile.loadFailed'),
         });
       } finally {
         setLoading(false);

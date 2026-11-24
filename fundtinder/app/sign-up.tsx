@@ -136,7 +136,7 @@ export default function SignUpScreen() {
                 marginBottom: 32,
               }}
             >
-              {t('common.signUp')}
+              {t('auth.signUpTitle')}
             </ThemedText>
 
             <View style={styles.profilePictureContainer}>

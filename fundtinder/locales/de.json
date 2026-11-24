@@ -10,6 +10,7 @@
   },
   "auth": {
     "loginOrSignUp": "Anmelden oder registrieren",
+    "signUpTitle": "Registrieren",
     "email": "E-Mail-Adresse eingeben",
     "password": "Passwort eingeben",
     "incorrectCredentials": "Falsche E-Mail-Adresse oder falsches Passwort!",
@@ -72,7 +73,28 @@
     "save": "Filter speichern",
     "saved": "Filter erfolgreich gespeichert.",
     "loadFailed": "Filter konnten nicht geladen werden.",
-    "saveFailed": "Filter konnten nicht gespeichert werden."
+    "saveFailed": "Filter konnten nicht gespeichert werden.",
+    "themeLabels": {
+      "businessGrowth": "Geschäftswachstum",
+      "digitalProducts": "Digitale Produkte",
+      "edTech": "Bildungstechnologie",
+      "genZ": "Generation Z",
+      "mentalHealth": "Psychische Gesundheit",
+      "philanthropy": "Philanthropie",
+      "productDevelopment": "Produktentwicklung",
+      "software": "Software",
+      "strategicInvestment": "Strategische Investitionen",
+      "technology": "Technologie",
+      "technologyInnovation": "Technologische Innovation",
+      "wellnessApp": "Wellness-App"
+    },
+    "cityLabels": {
+      "amsterdam": "Amsterdam",
+      "budapest": "Budapest",
+      "demo": "Demo",
+      "london": "London",
+      "washingtonDc": "Washington D.C."
+    }
   },
   "profile": {
     "name": "Name",
@@ -85,6 +107,7 @@
     "edit": "Profil bearbeiten",
     "save": "Profil speichern",
     "logout": "Abmelden",
+    "loadFailed": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
     "updated": "Profil erfolgreich aktualisiert.",
     "updateFailed": "Profil konnte nicht aktualisiert werden.",
     "logoutFailed": "Abmelden fehlgeschlagen."

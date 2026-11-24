@@ -117,7 +117,7 @@ describe('Lili AI screen', () => {
         fireEvent.changeText(input, 'First question');
         fireEvent.press(getByText('Send'));
 
-        expect(getByLabelText('Lili is typing')).toBeTruthy();
+        expect(getByLabelText('Typing')).toBeTruthy();
         fireEvent.press(getByText('Send'));
         expect(mockedAskLili).toHaveBeenCalledTimes(1);
       });
@@ -137,9 +137,9 @@ describe('Lili AI screen', () => {
         fireEvent.changeText(getByPlaceholderText('Ask Lili AI...'), 'Question');
         fireEvent.press(getByText('Send'));
 
-        expect(getByLabelText('Lili is typing')).toBeTruthy();
+        expect(getByLabelText('Typing')).toBeTruthy();
         await waitFor(() => {
-          expect(queryByLabelText('Lili is typing')).toBeNull();
+          expect(queryByLabelText('Typing')).toBeNull();
           expect(getByText('Delayed answer')).toBeTruthy();
         });
       });

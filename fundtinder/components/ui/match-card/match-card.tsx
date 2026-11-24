@@ -13,6 +13,7 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
 import { getProfilePictureUrl } from '@/services/chat-service/chatService';
 import { ThemedText } from '@/components/themed-text/themed-text';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   name: string;
@@ -41,6 +42,7 @@ export function MatchCard({
 }: Props) {
   const colorScheme = useColorScheme();
   const colors = colorScheme === 'dark' ? Colors.dark : Colors.light;
+  const { t } = useTranslation();
   const [showExplanation, setShowExplanation] = useState(false);
   const [isUnmatchHovered, setIsUnmatchHovered] = useState(false);
 
@@ -74,17 +76,17 @@ export function MatchCard({
           </ThemedText>
         </View>
         <ThemedText>
-          {investor ? 'Investor' : 'Founder'} · {city}
+          {investor ? t('matches.investor') : t('matches.founder')} · {city}
         </ThemedText>
         <View style={styles.matchLabel}>
           <Sparkles size={15} color={colors.base} />
           <ThemedText style={{ color: colors.base }}>
-            Lili AI match
+            {t('matches.label')}
           </ThemedText>
         </View>
         {sharedThemes.length > 0 && (
           <ThemedText numberOfLines={1} style={styles.themes}>
-            Shared: {sharedThemes.join(', ')}
+            {t('matches.shared')}: {sharedThemes.join(', ')}
           </ThemedText>
         )}
         </View>
@@ -92,7 +94,7 @@ export function MatchCard({
 
       <View style={styles.rightActions}>
         <Pressable
-          accessibilityLabel="Unmatch"
+          accessibilityLabel={t('matches.unmatch')}
           onPress={onUnmatch}
           onHoverIn={() => setIsUnmatchHovered(true)}
           onHoverOut={() => setIsUnmatchHovered(false)}
@@ -110,7 +112,7 @@ export function MatchCard({
                 isUnmatchHovered && styles.unmatchTextHovered,
               ]}
             >
-              Unmatch
+              {t('matches.unmatch')}
             </ThemedText>
           ) : (
             <HeartOff size={22} color={colors.error} />
@@ -164,7 +166,7 @@ export function MatchCard({
                 { backgroundColor: colors.background },
               ]}
             >
-              <ThemedText type="subtitle">Lili AI match</ThemedText>
+              <ThemedText type="subtitle">{t('matches.label')}</ThemedText>
               <ThemedText>{explanation}</ThemedText>
               <Pressable
                 onPress={() => setShowExplanation(false)}

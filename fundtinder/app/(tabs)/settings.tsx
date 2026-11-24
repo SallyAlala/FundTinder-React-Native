@@ -2,11 +2,11 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Moon, Sun, Smartphone } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import ParallaxScrollView from '@/components/parallax-scroll-view/parallax-scroll-view';
+import { ThemedText } from '@/components/themed-text/themed-text';
+import { ThemedView } from '@/components/themed-view/themed-view';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useColorScheme } from '@/hooks/use-color-scheme/use-color-scheme';
 import {
   Language,
   ThemePreference,
@@ -20,7 +20,7 @@ export default function SettingsTabScreen() {
   const { t } = useTranslation();
   const { theme, language, setTheme, setLanguage } = usePreferences();
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme];
+  const colors = Colors[colorScheme ?? 'light'];
 
   const themeLabels = {
     system: t('settings.system'),
