@@ -28,12 +28,14 @@ import * as ImagePicker from 'expo-image-picker';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import ScrollView = Animated.ScrollView;
+import { useTranslation } from 'react-i18next';
 
 export default function SignUpScreen() {
   const isDesktop = useIsDesktop();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
+  const { t } = useTranslation();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -72,8 +74,8 @@ export default function SignUpScreen() {
     ) {
       Toast.show({
         type: 'error',
-        text1: 'Missing information',
-        text2: 'Please fill out all required fields.',
+        text1: t('auth.missingInformation'),
+        text2: t('auth.fillRequired'),
       });
 
       return;
@@ -98,8 +100,8 @@ export default function SignUpScreen() {
       console.log(error);
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'An unknown error occurred, please try again later!',
+        text1: t('common.error'),
+        text2: t('auth.unknownError'),
       });
     } finally {
       setLoading(false);
@@ -134,7 +136,7 @@ export default function SignUpScreen() {
                 marginBottom: 32,
               }}
             >
-              Sign up
+              {t('common.signUp')}
             </ThemedText>
 
             <View style={styles.profilePictureContainer}>
@@ -153,7 +155,7 @@ export default function SignUpScreen() {
                         width: 80,
                       }}
                     >
-                      Add profile picture
+                      {t('auth.addProfilePicture')}
                     </ThemedText>
                   </View>
                 )}
@@ -162,7 +164,7 @@ export default function SignUpScreen() {
 
             <TextField
               required
-              placeholder="Enter your name"
+              placeholder={t('auth.name')}
               value={name}
               onChangeText={setName}
               icon={<PersonStandingIcon size={18} />}
@@ -170,7 +172,7 @@ export default function SignUpScreen() {
             <TextField
               required
               type="emailAddress"
-              placeholder="Enter your email"
+              placeholder={t('auth.email')}
               value={email}
               onChangeText={setEmail}
               icon={<Mail size={18} />}
@@ -178,28 +180,28 @@ export default function SignUpScreen() {
             <TextField
               required
               type="password"
-              placeholder="Enter your password"
+              placeholder={t('auth.password')}
               value={password}
               onChangeText={setPassword}
               icon={<Lock size={18} />}
             />
             <TextField
               required
-              placeholder="City of residence"
+              placeholder={t('auth.city')}
               value={location}
               onChangeText={setLocation}
               icon={<LocateIcon size={18} />}
             />
             <TextField
               required
-              placeholder="Enter the budget needed/invested"
+              placeholder={t('auth.budget')}
               value={budget}
               onChangeText={setBudget}
               icon={<WalletIcon size={18} />}
             />
             <TextField
               required
-              placeholder="Enter description of your requirements"
+              placeholder={t('auth.requirements')}
               value={description}
               onChangeText={setDescription}
               icon={<NotebookIcon size={18} />}
@@ -212,7 +214,7 @@ export default function SignUpScreen() {
             >
               <Switch value={isInvestor} onValueChange={setIsInvestor} />
               <ThemedText style={styles.toggleTextStyle}>
-                I am signing up as an investor
+                {t('auth.investorSignup')}
               </ThemedText>
             </View>
           </View>
@@ -223,7 +225,7 @@ export default function SignUpScreen() {
             ]}
           >
             <Button
-              title="Cancel"
+              title={t('common.cancel')}
               type="secondary"
               style={isDesktop ? styles.desktopButton : undefined}
               onPress={() => {
@@ -231,7 +233,7 @@ export default function SignUpScreen() {
               }}
             />
             <Button
-              title={'Sign Up'}
+              title={t('common.signUp')}
               loading={loading}
               disabled={loading}
               style={isDesktop ? styles.desktopButton : undefined}

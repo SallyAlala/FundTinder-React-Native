@@ -11,15 +11,18 @@ import {
   MessageCircleHeart,
   Sparkles,
   User,
+  Settings,
 } from 'lucide-react-native';
 import { useAuth } from '@/providers/auth-provider';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export default function TabLayout() {
   const isDesktop = useIsDesktop();
   const colorScheme = useColorScheme();
   const { user, loading } = useAuth();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (Platform.OS !== 'web') {
@@ -95,28 +98,28 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: !isDesktop ? 'Home' : '',
+          title: !isDesktop ? t('tabs.home') : '',
           tabBarIcon: ({ color }) => <Home size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="filters"
         options={{
-          title: !isDesktop ? 'Filters' : '',
+          title: !isDesktop ? t('tabs.filters') : '',
           tabBarIcon: ({ color }) => <ListFilterPlus size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="matches"
         options={{
-          title: !isDesktop ? 'Matches' : '',
+          title: !isDesktop ? t('tabs.matches') : '',
           tabBarIcon: ({ color }) => <Sparkles size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="chats"
         options={{
-          title: !isDesktop ? 'Chats' : '',
+          title: !isDesktop ? t('tabs.chats') : '',
           tabBarIcon: ({ color }) => (
             <MessageCircleHeart size={28} color={color} />
           ),
@@ -125,15 +128,22 @@ export default function TabLayout() {
       <Tabs.Screen
         name="lili"
         options={{
-          title: !isDesktop ? 'Lili' : '',
+          title: !isDesktop ? t('tabs.lili') : '',
           tabBarIcon: ({ color }) => <Brain size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: !isDesktop ? 'Profile' : '',
+          title: !isDesktop ? t('tabs.profile') : '',
           tabBarIcon: ({ color }) => <User size={28} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: !isDesktop ? t('tabs.settings') : '',
+          tabBarIcon: ({ color }) => <Settings size={28} color={color} />,
         }}
       />
     </Tabs>

@@ -12,6 +12,7 @@ import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginScreen() {
   const isDesktop = useIsDesktop();
@@ -19,6 +20,7 @@ export default function LoginScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,14 +36,14 @@ export default function LoginScreen() {
       if (error.code === 'auth/invalid-credential') {
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'Incorrect email or password!',
+          text1: t('common.error'),
+          text2: t('auth.incorrectCredentials'),
         });
       } else {
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'An unknown error occurred, please try again later!',
+          text1: t('common.error'),
+          text2: t('auth.unknownError'),
         });
       }
     } finally {
@@ -70,24 +72,23 @@ export default function LoginScreen() {
                 marginBottom: 24,
               }}
             >
-              Connect founders with investors.
+              {t('auth.connect')}
             </ThemedText>
 
             <ThemedText style={styles.desktopDescription}>
-              FundTinder helps entrepreneurs find the right investors and
-              investors discover promising startup ideas.
+              {t('auth.description')}
             </ThemedText>
 
             <ThemedText style={styles.desktopBullet}>
-              🚀 Discover startup opportunities
+              {t('auth.discover')}
             </ThemedText>
 
             <ThemedText style={styles.desktopBullet}>
-              💰 Find investors and funding
+              {t('auth.funding')}
             </ThemedText>
 
             <ThemedText style={styles.desktopBullet}>
-              🤝 Build valuable business connections
+              {t('auth.connections')}
             </ThemedText>
           </View>
 
@@ -105,13 +106,13 @@ export default function LoginScreen() {
                 marginBottom: 32,
               }}
             >
-              Login or Sign up
+              {t('auth.loginOrSignUp')}
             </ThemedText>
 
             <TextField
               required
               type="emailAddress"
-              placeholder="Enter your email"
+              placeholder={t('auth.email')}
               value={email}
               onChangeText={setEmail}
               icon={<Mail size={18} />}
@@ -120,7 +121,7 @@ export default function LoginScreen() {
             <TextField
               required
               type="password"
-              placeholder="Enter your password"
+              placeholder={t('auth.password')}
               value={password}
               onChangeText={setPassword}
               icon={<Lock size={18} />}
@@ -128,7 +129,7 @@ export default function LoginScreen() {
 
             <View style={styles.desktopButtonContainer}>
               <Button
-                title="Login"
+                title={t('common.login')}
                 loading={loading}
                 disabled={loading}
                 onPress={onLoginButtonClick}
@@ -136,7 +137,7 @@ export default function LoginScreen() {
               />
 
               <Button
-                title="Sign Up"
+                title={t('common.signUp')}
                 type="secondary"
                 onPress={() => router.navigate('/sign-up')}
                 style={styles.desktopButton}
@@ -175,13 +176,13 @@ export default function LoginScreen() {
               marginBottom: 32,
             }}
           >
-            Login or Sign up
+            {t('auth.loginOrSignUp')}
           </ThemedText>
 
           <TextField
             required
             type="emailAddress"
-            placeholder="Enter your email"
+            placeholder={t('auth.email')}
             value={email}
             onChangeText={setEmail}
             icon={<Mail size={18} />}
@@ -189,7 +190,7 @@ export default function LoginScreen() {
           <TextField
             required
             type="password"
-            placeholder="Enter your password"
+            placeholder={t('auth.password')}
             value={password}
             onChangeText={setPassword}
             icon={<Lock size={18} />}
@@ -212,7 +213,7 @@ export default function LoginScreen() {
             ]}
           >
             <Button
-              title="Login"
+              title={t('common.login')}
               loading={loading}
               disabled={loading}
               onPress={onLoginButtonClick}
@@ -220,7 +221,7 @@ export default function LoginScreen() {
             />
 
             <Button
-              title="Sign Up"
+              title={t('common.signUp')}
               type="secondary"
               onPress={() => router.navigate('/sign-up')}
               style={isDesktop ? styles.desktopButton : undefined}

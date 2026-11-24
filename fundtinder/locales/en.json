@@ -1,0 +1,131 @@
+{
+  "common": {
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "login": "Login",
+    "signUp": "Sign Up",
+    "save": "Save",
+    "loading": "Loading"
+  },
+  "auth": {
+    "loginOrSignUp": "Login or Sign up",
+    "email": "Enter your email",
+    "password": "Enter your password",
+    "incorrectCredentials": "Incorrect email or password!",
+    "unknownError": "An unknown error occurred, please try again later!",
+    "connect": "Connect founders with investors.",
+    "description": "FundTinder helps entrepreneurs find the right investors and investors discover promising startup ideas.",
+    "discover": "🚀 Discover startup opportunities",
+    "funding": "💰 Find investors and funding",
+    "connections": "🤝 Build valuable business connections",
+    "name": "Enter your name",
+    "city": "City of residence",
+    "budget": "Enter the budget needed/invested",
+    "requirements": "Enter description of your requirements",
+    "addProfilePicture": "Add profile picture",
+    "investorSignup": "I am signing up as an investor",
+    "missingInformation": "Missing information",
+    "fillRequired": "Please fill out all required fields."
+  },
+  "validation": {
+    "required": "This field is required!",
+    "email": "Invalid email address!",
+    "password": "Min 6 characters are required!"
+  },
+  "tabs": {
+    "home": "Home",
+    "filters": "Filters",
+    "matches": "Matches",
+    "chats": "Chats",
+    "lili": "Lili",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "settings": {
+    "language": "Language",
+    "theme": "Theme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "hungarian": "Hungarian",
+    "english": "English",
+    "german": "German"
+  },
+  "home": {
+    "browse": "Browse",
+    "caughtUp": "You're all caught up! Stay tuned - new people will be joining soon.",
+    "chatRightAway": "Chat right away",
+    "match": "It's a match!",
+    "matchMessage": "{{name}} wants to match with you!",
+    "continueBrowsing": "Continue browsing",
+    "swipeLeft": "Swipe left",
+    "swipeRight": "Swipe right",
+    "couldNotSaveSwipe": "Could not save your swipe."
+  },
+  "filters": {
+    "themes": "Themes",
+    "cities": "Cities",
+    "budget": "Budget",
+    "minimumBudget": "Minimum Budget",
+    "maximumBudget": "Maximum Budget",
+    "save": "Save Filters",
+    "saved": "Filters saved successfully.",
+    "loadFailed": "Failed to load filters.",
+    "saveFailed": "Failed to save filters."
+  },
+  "profile": {
+    "name": "Name",
+    "location": "Location",
+    "budget": "Budget",
+    "role": "Role",
+    "description": "Description",
+    "investor": "Investor",
+    "mastermind": "Mastermind",
+    "edit": "Edit profile",
+    "save": "Save profile",
+    "logout": "Logout",
+    "updated": "Profile updated successfully.",
+    "updateFailed": "Failed to update profile.",
+    "logoutFailed": "Failed to sign out."
+  },
+  "chat": {
+    "noConversations": "You don't have any conversations yet.",
+    "selectConversation": "Select a conversation",
+    "chooseConversation": "Choose a chat from the list to start messaging.",
+    "placeholder": "Type a message...",
+    "seen": "Seen"
+  },
+  "matches": {
+    "ranking": "Lili AI ranking",
+    "rankingDescription": "Lili AI ranked your mutual matches from strongest to weakest based on your preferences.",
+    "none": "No mutual matches yet.",
+    "loadFailed": "Failed to load matches.",
+    "unmatchFailed": "Could not unmatch this person.",
+    "openChatFailed": "Could not open this chat.",
+    "investor": "Investor",
+    "founder": "Founder",
+    "label": "Lili AI match",
+    "shared": "Shared",
+    "unmatch": "Unmatch",
+    "ok": "OK"
+  },
+  "lili": {
+    "welcome": "Hi! I'm Lili AI. I can help you navigate FundTinder and answer startup-related questions.",
+    "whatIs": "What is FundTinder?",
+    "filter": "How can I filter users?",
+    "themes": "How do themes work?",
+    "profile": "How can I improve my profile?",
+    "placeholder": "Ask Lili AI...",
+    "send": "Send",
+    "typing": "Typing"
+  },
+  "card": {
+    "name": "👤 Name",
+    "location": "📍 Location",
+    "budget": "💰 Budget",
+    "description": "📝 Description",
+    "investor": "💼 Investor",
+    "founder": "🚀 Founder"
+  }
+}

@@ -8,6 +8,7 @@ import {
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import React, { useState } from 'react';
 import { Colors } from '@/constants/theme';
+import { useTranslation } from 'react-i18next';
 
 type Props = TextInputProps & {
   label?: string;
@@ -29,6 +30,7 @@ export function TextField({
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
+  const { t } = useTranslation();
 
   const [isFocused, setIsFocused] = useState(false);
   const [internalError, setInternalError] = useState('');
@@ -45,17 +47,17 @@ export function TextField({
 
   const validate = (value: string) => {
     if (required && !value.trim()) {
-      return 'This field is required!';
+      return t('validation.required');
     }
 
     if (!value.trim()) return '';
 
     if (type === 'emailAddress') {
-      return /\S+@\S+\.\S+/.test(value) ? '' : 'Invalid email address!';
+      return /\S+@\S+\.\S+/.test(value) ? '' : t('validation.email');
     }
 
     if (type === 'password') {
-      return value.length >= 6 ? '' : 'Min 6 characters are required!';
+      return value.length >= 6 ? '' : t('validation.password');
     }
 
     return '';

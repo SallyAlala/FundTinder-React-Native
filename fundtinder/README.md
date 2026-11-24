@@ -25,6 +25,21 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Localization
+
+The app uses `i18next` and `react-i18next`. Translation resources live in
+`locales/en.json` and `locales/hu.json`; the device language is selected
+automatically, with English as the fallback. Adding a language requires adding
+its JSON resource and registering it in `constants/i18n.ts`.
+
+Use `useTranslation()` and translation keys in components instead of hardcoded
+user-facing strings:
+
+```tsx
+const { t } = useTranslation();
+<Button title={t('common.save')} onPress={save} />;
+```
+
 ## Get a fresh project
 
 When you're ready, run:

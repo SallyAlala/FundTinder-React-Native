@@ -1,0 +1,131 @@
+{
+  "common": {
+    "error": "Hiba",
+    "success": "Siker",
+    "cancel": "Mégse",
+    "login": "Bejelentkezés",
+    "signUp": "Regisztráció",
+    "save": "Mentés",
+    "loading": "Betöltés"
+  },
+  "auth": {
+    "loginOrSignUp": "Bejelentkezés vagy regisztráció",
+    "email": "Add meg az e-mail-címed",
+    "password": "Add meg a jelszavad",
+    "incorrectCredentials": "Helytelen e-mail-cím vagy jelszó!",
+    "unknownError": "Ismeretlen hiba történt, próbáld újra később!",
+    "connect": "Alapítókat kapcsolunk össze befektetőkkel.",
+    "description": "A FundTinder segít a vállalkozóknak megtalálni a megfelelő befektetőket, a befektetőknek pedig ígéretes startupötleteket felfedezni.",
+    "discover": "🚀 Fedezz fel startup-lehetőségeket",
+    "funding": "💰 Találj befektetőket és finanszírozást",
+    "connections": "🤝 Építs értékes üzleti kapcsolatokat",
+    "name": "Add meg a neved",
+    "city": "Lakóhely szerinti város",
+    "budget": "Add meg a szükséges/befektetendő összeget",
+    "requirements": "Írd le az igényeidet",
+    "addProfilePicture": "Profilkép hozzáadása",
+    "investorSignup": "Befektetőként regisztrálok",
+    "missingInformation": "Hiányzó adatok",
+    "fillRequired": "Töltsd ki az összes kötelező mezőt."
+  },
+  "validation": {
+    "required": "A mező kitöltése kötelező!",
+    "email": "Érvénytelen e-mail-cím!",
+    "password": "Legalább 6 karakter szükséges!"
+  },
+  "tabs": {
+    "home": "Kezdőlap",
+    "filters": "Szűrők",
+    "matches": "Találatok",
+    "chats": "Üzenetek",
+    "lili": "Lili",
+    "profile": "Profil",
+    "settings": "Beállítások"
+  },
+  "settings": {
+    "language": "Nyelv",
+    "theme": "Téma",
+    "system": "Rendszer",
+    "light": "Világos",
+    "dark": "Sötét",
+    "hungarian": "Magyar",
+    "english": "Angol",
+    "german": "Német"
+  },
+  "home": {
+    "browse": "Böngészés",
+    "caughtUp": "Nincs több találat! Hamarosan új emberek csatlakoznak.",
+    "chatRightAway": "Azonnali üzenet",
+    "match": "Egyezés!",
+    "matchMessage": "{{name}} szeretne egyezést veled!",
+    "continueBrowsing": "Böngészés folytatása",
+    "swipeLeft": "Balra húzás",
+    "swipeRight": "Jobbra húzás",
+    "couldNotSaveSwipe": "Nem sikerült menteni a döntésedet."
+  },
+  "filters": {
+    "themes": "Témák",
+    "cities": "Városok",
+    "budget": "Költségvetés",
+    "minimumBudget": "Minimális költségvetés",
+    "maximumBudget": "Maximális költségvetés",
+    "save": "Szűrők mentése",
+    "saved": "A szűrők mentése sikeres.",
+    "loadFailed": "Nem sikerült betölteni a szűrőket.",
+    "saveFailed": "Nem sikerült menteni a szűrőket."
+  },
+  "profile": {
+    "name": "Név",
+    "location": "Lakóhely",
+    "budget": "Költségvetés",
+    "role": "Szerepkör",
+    "description": "Bemutatkozás",
+    "investor": "Befektető",
+    "mastermind": "Alapító",
+    "edit": "Profil szerkesztése",
+    "save": "Profil mentése",
+    "logout": "Kijelentkezés",
+    "updated": "A profil frissítése sikeres.",
+    "updateFailed": "Nem sikerült frissíteni a profilt.",
+    "logoutFailed": "Nem sikerült kijelentkezni."
+  },
+  "chat": {
+    "noConversations": "Még nincs beszélgetésed.",
+    "selectConversation": "Válassz beszélgetést",
+    "chooseConversation": "Válassz egy beszélgetést az üzenetküldés megkezdéséhez.",
+    "placeholder": "Írj üzenetet...",
+    "seen": "Látta"
+  },
+  "matches": {
+    "ranking": "Lili AI rangsorolás",
+    "rankingDescription": "A Lili AI az egyezéseidet az érdeklődésed alapján a legerősebbtől a leggyengébbig rangsorolta.",
+    "none": "Még nincs kölcsönös egyezés.",
+    "loadFailed": "Nem sikerült betölteni az egyezéseket.",
+    "unmatchFailed": "Nem sikerült megszüntetni az egyezést.",
+    "openChatFailed": "Nem sikerült megnyitni a beszélgetést.",
+    "investor": "Befektető",
+    "founder": "Alapító",
+    "label": "Lili AI egyezés",
+    "shared": "Közös",
+    "unmatch": "Szakítás",
+    "ok": "Rendben"
+  },
+  "lili": {
+    "welcome": "Szia! Lili AI vagyok. Segítek eligazodni a FundTinderben és startupokkal kapcsolatos kérdésekre válaszolok.",
+    "whatIs": "Mi az a FundTinder?",
+    "filter": "Hogyan szűrhetem a felhasználókat?",
+    "themes": "Hogyan működnek a témák?",
+    "profile": "Hogyan javíthatok a profilomon?",
+    "placeholder": "Kérdezd Lili AI-t...",
+    "send": "Küldés",
+    "typing": "Gépel"
+  },
+  "card": {
+    "name": "👤 Név",
+    "location": "📍 Lakóhely",
+    "budget": "💰 Költségvetés",
+    "description": "📝 Bemutatkozás",
+    "investor": "💼 Befektető",
+    "founder": "🚀 Alapító"
+  }
+}

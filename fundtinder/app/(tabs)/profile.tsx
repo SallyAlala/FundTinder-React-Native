@@ -29,12 +29,14 @@ import * as ImagePicker from 'expo-image-picker';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { logout } from '@/services/authService';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 export default function ProfileTabScreen() {
   const isDesktop = useIsDesktop();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? Colors.dark : Colors.light;
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<Profile>({
     name: '',
     city: '',
@@ -70,11 +72,11 @@ export default function ProfileTabScreen() {
 
         setProfile(data);
         setFormData(data);
-      } catch (error) {
+      } catch {
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'An unknown error occurred, please try again later.',
+          text1: t('common.error'),
+          text2: t('auth.unknownError'),
         });
       } finally {
         setLoading(false);
@@ -82,7 +84,7 @@ export default function ProfileTabScreen() {
     };
 
     loadProfile();
-  }, []);
+  }, [t]);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -136,14 +138,14 @@ export default function ProfileTabScreen() {
 
       Toast.show({
         type: 'success',
-        text1: 'Success',
-        text2: 'Profile updated successfully.',
+        text1: t('common.success'),
+        text2: t('profile.updated'),
       });
-    } catch (error) {
+    } catch {
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'Failed to update profile.',
+        text1: t('common.error'),
+        text2: t('profile.updateFailed'),
       });
     } finally {
       setSavingLoading(false);
@@ -159,8 +161,8 @@ export default function ProfileTabScreen() {
     } catch {
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'Failed to sign out.',
+        text1: t('common.error'),
+        text2: t('profile.logoutFailed'),
       });
     } finally {
       setLogoutLoading(false);
@@ -211,13 +213,13 @@ export default function ProfileTabScreen() {
           isDesktop && styles.desktopTitleContainer,
         ]}
       >
-        <ThemedText type="title">Profile</ThemedText>
+        <ThemedText type="title">{t('tabs.profile')}</ThemedText>
       </ThemedView>
 
       {isEditing ? (
         <View style={styles.formContainer}>
           <TextField
-            label="Name"
+            label={t('profile.name')}
             value={formData.name}
             onChangeText={(text: string) =>
               setFormData((prev) => ({
@@ -228,7 +230,7 @@ export default function ProfileTabScreen() {
           />
 
           <TextField
-            label="Location"
+            label={t('profile.location')}
             value={formData.city}
             onChangeText={(text: string) =>
               setFormData((prev) => ({
@@ -240,7 +242,7 @@ export default function ProfileTabScreen() {
 
           <TextField
             type="numeric"
-            label="Budget"
+            label={t('profile.budget')}
             keyboardType="numeric"
             value={formData.budget}
             onChangeText={(text: string) =>
@@ -259,7 +261,7 @@ export default function ProfileTabScreen() {
               ]}
             >
               <Button
-                title="Investor"
+                title={t('profile.investor')}
                 onPress={() =>
                   setFormData((prev) => ({
                     ...prev,
@@ -276,7 +278,7 @@ export default function ProfileTabScreen() {
               ]}
             >
               <Button
-                title="Mastermind"
+                title={t('profile.mastermind')}
                 onPress={() =>
                   setFormData((prev) => ({
                     ...prev,
@@ -288,7 +290,7 @@ export default function ProfileTabScreen() {
           </View>
 
           <TextField
-            label="Description"
+            label={t('profile.description')}
             multiline
             value={formData.description}
             onChangeText={(text: string) =>
@@ -307,13 +309,13 @@ export default function ProfileTabScreen() {
             ]}
           >
             <Button
-              title="Cancel"
+              title={t('common.cancel')}
               type="secondary"
               style={isDesktop ? styles.desktopButton : undefined}
               onPress={() => setIsEditing(false)}
             />
             <Button
-              title="Save profile"
+              title={t('profile.save')}
               style={isDesktop ? styles.desktopButton : undefined}
               loading={savingLoading}
               disabled={savingLoading}
@@ -323,25 +325,27 @@ export default function ProfileTabScreen() {
         </View>
       ) : (
         <View>
-          <Collapsible title="👤 Name">
+          <Collapsible title={`👤 ${t('profile.name')}`}>
             <ThemedText>{profile.name}</ThemedText>
           </Collapsible>
 
-          <Collapsible title="📍 Location">
+          <Collapsible title={`📍 ${t('profile.location')}`}>
             <ThemedText>{profile.city}</ThemedText>
           </Collapsible>
 
-          <Collapsible title="💰 Budget">
+          <Collapsible title={`💰 ${t('profile.budget')}`}>
             <ThemedText type="numeric">{profile.budget}</ThemedText>
           </Collapsible>
 
-          <Collapsible title="💡 Role">
+          <Collapsible title={`💡 ${t('profile.role')}`}>
             <ThemedText>
-              {profile.investor ? 'Investor' : 'Mastermind'}
+              {profile.investor
+                ? t('profile.investor')
+                : t('profile.mastermind')}
             </ThemedText>
           </Collapsible>
 
-          <Collapsible title="📝 Description">
+          <Collapsible title={`📝 ${t('profile.description')}`}>
             <ThemedText>{profile.description}</ThemedText>
           </Collapsible>
 
@@ -352,12 +356,12 @@ export default function ProfileTabScreen() {
             ]}
           >
             <Button
-              title="Edit profile"
+              title={t('profile.edit')}
               style={isDesktop ? styles.desktopButton : undefined}
               onPress={handleEditPress}
             />
             <Button
-              title="Logout"
+              title={t('profile.logout')}
               type="logout"
               disabled={logoutLoading}
               loading={logoutLoading}
