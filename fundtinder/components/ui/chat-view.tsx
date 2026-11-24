@@ -25,6 +25,7 @@ import { db } from '@/config/firebase';
 import { Loading } from '@/components/ui/loading';
 import { ArrowLeft, SendHorizontal } from 'lucide-react-native';
 import { ThemedText } from '@/components/themed-text';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   chatId: string;
@@ -34,6 +35,7 @@ type Props = {
 export function ChatView({ chatId, otherAppId }: Props) {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
+  const { t } = useTranslation();
 
   const isDesktop = useIsDesktop();
 
@@ -207,7 +209,7 @@ export function ChatView({ chatId, otherAppId }: Props) {
                   otherReadTimestamp &&
                   otherReadTimestamp >= item.timestamp && (
                     <ThemedText style={styles.seenText}>
-                      Seen{' '}
+                      {t('chat.seen')}{' '}
                       {new Date(otherReadTimestamp).toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -233,7 +235,7 @@ export function ChatView({ chatId, otherAppId }: Props) {
           multiline
           value={messageText}
           onChangeText={setMessageText}
-          placeholder="Type a message..."
+          placeholder={t('chat.placeholder')}
           placeholderTextColor={colors.placeholder}
           style={[
             styles.input,

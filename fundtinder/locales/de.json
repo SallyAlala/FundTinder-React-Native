@@ -1,0 +1,131 @@
+{
+  "common": {
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "login": "Anmelden",
+    "signUp": "Registrieren",
+    "save": "Speichern",
+    "loading": "Wird geladen"
+  },
+  "auth": {
+    "loginOrSignUp": "Anmelden oder registrieren",
+    "email": "E-Mail-Adresse eingeben",
+    "password": "Passwort eingeben",
+    "incorrectCredentials": "Falsche E-Mail-Adresse oder falsches Passwort!",
+    "unknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut!",
+    "connect": "Wir verbinden Gründer mit Investoren.",
+    "description": "FundTinder hilft Unternehmern, die richtigen Investoren zu finden, und Investoren, vielversprechende Startup-Ideen zu entdecken.",
+    "discover": "🚀 Startup-Möglichkeiten entdecken",
+    "funding": "💰 Investoren und Finanzierung finden",
+    "connections": "🤝 Wertvolle Geschäftskontakte knüpfen",
+    "name": "Namen eingeben",
+    "city": "Wohnort",
+    "budget": "Benötigten oder zu investierenden Betrag eingeben",
+    "requirements": "Beschreibe deine Anforderungen",
+    "addProfilePicture": "Profilbild hinzufügen",
+    "investorSignup": "Ich registriere mich als Investor",
+    "missingInformation": "Fehlende Angaben",
+    "fillRequired": "Bitte fülle alle Pflichtfelder aus."
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich!",
+    "email": "Ungültige E-Mail-Adresse!",
+    "password": "Mindestens 6 Zeichen erforderlich!"
+  },
+  "tabs": {
+    "home": "Startseite",
+    "filters": "Filter",
+    "matches": "Matches",
+    "chats": "Chats",
+    "lili": "Lili",
+    "profile": "Profil",
+    "settings": "Einstellungen"
+  },
+  "settings": {
+    "language": "Sprache",
+    "theme": "Design",
+    "system": "System",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "hungarian": "Ungarisch",
+    "english": "Englisch",
+    "german": "Deutsch"
+  },
+  "home": {
+    "browse": "Entdecken",
+    "caughtUp": "Du hast alle Profile gesehen! Bald kommen neue Personen hinzu.",
+    "chatRightAway": "Sofort chatten",
+    "match": "Ein Match!",
+    "matchMessage": "{{name}} möchte sich mit dir verbinden!",
+    "continueBrowsing": "Weiter entdecken",
+    "swipeLeft": "Nach links wischen",
+    "swipeRight": "Nach rechts wischen",
+    "couldNotSaveSwipe": "Deine Auswahl konnte nicht gespeichert werden."
+  },
+  "filters": {
+    "themes": "Themen",
+    "cities": "Städte",
+    "budget": "Budget",
+    "minimumBudget": "Mindestbudget",
+    "maximumBudget": "Maximalbudget",
+    "save": "Filter speichern",
+    "saved": "Filter erfolgreich gespeichert.",
+    "loadFailed": "Filter konnten nicht geladen werden.",
+    "saveFailed": "Filter konnten nicht gespeichert werden."
+  },
+  "profile": {
+    "name": "Name",
+    "location": "Ort",
+    "budget": "Budget",
+    "role": "Rolle",
+    "description": "Beschreibung",
+    "investor": "Investor",
+    "mastermind": "Gründer",
+    "edit": "Profil bearbeiten",
+    "save": "Profil speichern",
+    "logout": "Abmelden",
+    "updated": "Profil erfolgreich aktualisiert.",
+    "updateFailed": "Profil konnte nicht aktualisiert werden.",
+    "logoutFailed": "Abmelden fehlgeschlagen."
+  },
+  "chat": {
+    "noConversations": "Du hast noch keine Unterhaltungen.",
+    "selectConversation": "Unterhaltung auswählen",
+    "chooseConversation": "Wähle einen Chat aus der Liste, um Nachrichten zu senden.",
+    "placeholder": "Nachricht eingeben...",
+    "seen": "Gesehen"
+  },
+  "matches": {
+    "ranking": "Lili-AI-Ranking",
+    "rankingDescription": "Lili AI hat deine gegenseitigen Matches anhand deiner Präferenzen vom stärksten bis zum schwächsten Match sortiert.",
+    "none": "Noch keine gegenseitigen Matches.",
+    "loadFailed": "Matches konnten nicht geladen werden.",
+    "unmatchFailed": "Die Verbindung konnte nicht getrennt werden.",
+    "openChatFailed": "Der Chat konnte nicht geöffnet werden.",
+    "investor": "Investor",
+    "founder": "Gründer",
+    "label": "Lili-AI-Match",
+    "shared": "Gemeinsam",
+    "unmatch": "Aufheben",
+    "ok": "OK"
+  },
+  "lili": {
+    "welcome": "Hallo! Ich bin Lili AI. Ich helfe dir bei der Nutzung von FundTinder und beantworte Fragen rund um Startups.",
+    "whatIs": "Was ist FundTinder?",
+    "filter": "Wie kann ich Nutzer filtern?",
+    "themes": "Wie funktionieren Themen?",
+    "profile": "Wie kann ich mein Profil verbessern?",
+    "placeholder": "Lili AI fragen...",
+    "send": "Senden",
+    "typing": "Schreibt"
+  },
+  "card": {
+    "name": "👤 Name",
+    "location": "📍 Ort",
+    "budget": "💰 Budget",
+    "description": "📝 Beschreibung",
+    "investor": "💼 Investor",
+    "founder": "🚀 Gründer"
+  }
+}

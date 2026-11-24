@@ -15,13 +15,27 @@ import { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider } from '@/providers/auth-provider';
+import {
+  PreferencesProvider,
+  usePreferences,
+} from '@/providers/preferences-provider';
+import '@/constants/i18n';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
 export default function RootLayout() {
+  return (
+    <PreferencesProvider>
+      <RootLayoutContent />
+    </PreferencesProvider>
+  );
+}
+
+function RootLayoutContent() {
   const colorScheme = useColorScheme();
+  const { ready } = usePreferences();
   const [loaded] = useFonts({
     Pacifico_400Regular,
   });
@@ -32,7 +46,7 @@ export default function RootLayout() {
     }
   }, []);
 
-  if (!loaded) return null;
+  if (!loaded || !ready) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
